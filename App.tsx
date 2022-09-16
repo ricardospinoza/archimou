@@ -8,11 +8,9 @@ import {HALF_SIZE, NODE_CENTER, NODE_SIZE, SIZE} from './src/constants';
 import {useTree} from './src/hooks';
 import {PersonNode} from './src/models/TreeViewModel';
 
-const {height, width} = Dimensions.get('window');
-
 const mockedNode: PersonNode = {
   id: '1',
-  name: 'Filho',
+  name: 'Eu',
   relations: [
     {
       id: '2',
@@ -24,6 +22,18 @@ const mockedNode: PersonNode = {
     },
     {
       id: '4',
+      type: 'Children',
+    },
+    {
+      id: '5',
+      type: 'Children',
+    },
+    {
+      id: '6',
+      type: 'Children',
+    },
+    {
+      id: '7',
       type: 'Children',
     },
   ],

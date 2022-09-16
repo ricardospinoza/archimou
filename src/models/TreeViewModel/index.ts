@@ -1,6 +1,7 @@
-import {HALF_SIZE, NODE_CENTER, NODE_SIZE} from '../../constants';
+import {NODE_CENTER, NODE_SIZE} from '../../constants';
 import {getUserTree} from '../../service';
 import {Position} from '../../types';
+import {DistributeService} from './DistributeService';
 
 type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
 
@@ -14,13 +15,14 @@ export interface PersonNode {
 export class TreeViewModel {
   #data: PersonNode[] = [];
   #nodeRef = {} as PersonNode;
+  #distribute = new DistributeService();
 
   #addPositionsToFamiliars() {
     const parents = this.#getNodesByType('Parent');
-    const parentsWithPosition = this.#setParentsPositions(parents);
+    const parentsWithPosition = this.#distribute.parentsPositions(parents);
 
     const children = this.#getNodesByType('Children');
-    const childrenWithPosition = this.#setParentsPositions(children);
+    const childrenWithPosition = this.#distribute.childrensPositions(children);
 
     return [...parentsWithPosition, ...childrenWithPosition];
   }
@@ -32,36 +34,10 @@ export class TreeViewModel {
     );
   }
 
-  #setParentsPositions(parents: PersonNode[]) {
-    const refPosition = this.#nodeRef.position!;
-
-    const diameter = NODE_SIZE * (parents.length + 2);
-    const radius = diameter / 2;
-
-    const circleRefCenter = {
-      x: refPosition.x + NODE_CENTER.x,
-      y: refPosition.y + NODE_CENTER.y - radius,
-    };
-
-    const angleForEach = Math.PI / (parents.length + 1);
-
-    const parentsWithPositions = parents.map((parent, i) => {
-      const angle = angleForEach * (i + 1);
-      const x = circleRefCenter.x - radius * Math.cos(angle);
-      const y = circleRefCenter.y - radius * Math.sin(angle);
-      parent.position = {
-        x: x - NODE_CENTER.x,
-        y: y - NODE_CENTER.y - NODE_SIZE * i,
-      };
-      return parent;
-    });
-
-    return parentsWithPositions;
-  }
-
   async putFamiliarNodesByFocusedNode(node: PersonNode) {
     this.#data = await getUserTree(node.id);
     this.#nodeRef = node;
+    this.#distribute.nodeRef = node;
 
     const familiarsWithPositions = this.#addPositionsToFamiliars();
 

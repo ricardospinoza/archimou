@@ -3,7 +3,7 @@ import {PersonNode} from './../../models/TreeViewModel/index';
 const mockData: PersonNode[] = [
   {
     id: '1',
-    name: 'Filho',
+    name: 'Eu',
     relations: [
       {
         id: '2',
@@ -15,6 +15,18 @@ const mockData: PersonNode[] = [
       },
       {
         id: '4',
+        type: 'Children',
+      },
+      {
+        id: '5',
+        type: 'Children',
+      },
+      {
+        id: '6',
+        type: 'Children',
+      },
+      {
+        id: '7',
         type: 'Children',
       },
     ],
@@ -40,8 +52,13 @@ const mockData: PersonNode[] = [
     relations: [],
   },
   {
-    id: '5',
+    id: '6',
     name: 'Beltrano',
+    relations: [],
+  },
+  {
+    id: '7',
+    name: 'Estranho',
     relations: [],
   },
 ];
