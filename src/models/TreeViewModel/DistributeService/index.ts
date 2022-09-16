@@ -16,7 +16,7 @@ export class DistributeService {
 
     const circleRefCenter = {
       x: refPosition.x + NODE_CENTER.x,
-      y: refPosition.y - NODE_CENTER.y - radius,
+      y: refPosition.y + NODE_SIZE / 2,
     };
 
     const angleForEach = Math.PI / (children.length + 1);
@@ -27,7 +27,7 @@ export class DistributeService {
       const y = circleRefCenter.y - radius * Math.sin(angle);
       child.position = {
         x: x - NODE_CENTER.x,
-        y: y + NODE_CENTER.y - NODE_SIZE * i,
+        y: y + NODE_CENTER.y,
       };
       return child;
     });
@@ -37,7 +37,7 @@ export class DistributeService {
   parentsPositions(parents: PersonNode[]) {
     const refPosition = this.#nodeRef.position!;
 
-    const diameter = NODE_SIZE * (parents.length + 2);
+    const diameter = NODE_SIZE * (parents.length + 1);
     const radius = diameter / 2;
 
     const circleRefCenter = {
@@ -53,7 +53,7 @@ export class DistributeService {
       const y = circleRefCenter.y - radius * Math.sin(angle);
       parent.position = {
         x: x - NODE_CENTER.x,
-        y: y - NODE_CENTER.y - NODE_SIZE * i,
+        y: y - NODE_CENTER.y,
       };
       return parent;
     });

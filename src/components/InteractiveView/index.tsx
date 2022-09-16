@@ -97,6 +97,7 @@ export const InteractiveView = forwardRef<
                 width: size,
                 height: size,
                 borderColor: 'black',
+                position: 'relative',
                 borderWidth: 2,
               } as StyleSheet.NamedStyles<{}>,
               animatedStyle,

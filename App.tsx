@@ -1,13 +1,10 @@
 import {ElementRef, useEffect, useRef, useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Person} from './src/components';
 import {InteractiveView} from './src/components/InteractiveView';
 import {HALF_SIZE, NODE_CENTER, NODE_SIZE, SIZE} from './src/constants';
 import {useTree} from './src/hooks';
 import {PersonNode} from './src/models/TreeViewModel';
-import {Position} from './src/types';
-
 const mockedNode: PersonNode = {
   id: '1',
   name: 'Eu',
@@ -68,45 +65,52 @@ const App = () => {
     } as PersonNode);
   };
 
-  return (
-    <InteractiveView
-      size={SIZE}
-      ref={interactiveViewRef}
-      onMove={() => {
-        setShowNodeActions(null);
-      }}>
-      {data.nodes.map(node => {
-        console.log('INSIDE MAP: ', {node});
-        return (
-          <Person
-            key={node.id}
-            value={node}
-            onLongPress={() => setShowNodeActions(node)}
-          />
-        );
-      })}
+  const hideOptions = () => {
+    setShowNodeActions(null);
+  };
 
-      {!!nodeActionsPressed && (
-        <TouchableOpacity
-          style={{
-            transform: [
-              {translateY: nodeActionsPressed.position!.y},
-              {translateX: nodeActionsPressed.position!.x},
-            ],
-            height: NODE_SIZE,
-            width: NODE_SIZE,
-            backgroundColor: 'blue',
-            zIndex: 15,
-          }}
-          onPress={() => {
-            console.log('touch');
-          }}
-          onLongPress={() => {
-            console.log('LONG PRESS');
-          }}>
-          <Text>Options</Text>
-        </TouchableOpacity>
-      )}
+  const testeCoord = {x: 3753.2002968608085, y: 3552.400858527664};
+
+  return (
+    <InteractiveView size={SIZE} ref={interactiveViewRef} onMove={hideOptions}>
+      <View
+        style={{
+          position: 'absolute',
+          height: '100%',
+        }}>
+        {data.nodes.map(node => {
+          console.log('INSIDE MAP: ', {node});
+          return (
+            <Person
+              key={node.id}
+              value={node}
+              onLongPress={() => setShowNodeActions(node)}
+            />
+          );
+        })}
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          height: '100%',
+          zIndex: 20,
+        }}>
+        {!!nodeActionsPressed && (
+          <Pressable
+            style={{
+              transform: [
+                {translateX: nodeActionsPressed.position!.x},
+                {translateY: nodeActionsPressed.position!.y},
+              ],
+              height: NODE_SIZE,
+              width: NODE_SIZE,
+              backgroundColor: 'blue',
+              zIndex: 20,
+            }}>
+            <Text>Options</Text>
+          </Pressable>
+        )}
+      </View>
     </InteractiveView>
   );
 };

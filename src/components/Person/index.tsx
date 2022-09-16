@@ -12,6 +12,7 @@ export const Person = ({value, onLongPress}: PersonProps) => {
     <Pressable
       key={value.id}
       style={{
+        position: 'absolute',
         transform: [
           {translateX: value.position!.x},
           {translateY: value.position!.y},
