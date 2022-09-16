@@ -17,6 +17,7 @@ import {Position} from '../../types';
 interface InteractiveViewProps {
   children: ReactNode;
   size: number;
+  onMove: () => void;
 }
 
 export interface InteractiveViewHandler {
@@ -28,7 +29,7 @@ const {height, width} = Dimensions.get('window');
 export const InteractiveView = forwardRef<
   InteractiveViewHandler,
   InteractiveViewProps
->(({children, size}, ref) => {
+>(({children, size, onMove}, ref) => {
   const x = useSharedValue(0);
   const y = useSharedValue(0);
   const initialValue = useSharedValue({x: 0, y: 0});
@@ -99,7 +100,8 @@ export const InteractiveView = forwardRef<
                 borderWidth: 2,
               } as StyleSheet.NamedStyles<{}>,
               animatedStyle,
-            ]}>
+            ]}
+            onTouchMove={onMove}>
             {children}
           </Animated.View>
         </GestureDetector>

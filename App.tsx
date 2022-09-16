@@ -1,12 +1,12 @@
-import {ElementRef, useEffect, useMemo, useRef} from 'react';
-import {Dimensions, Text, View} from 'react-native';
-import {
-  InteractiveView,
-  InteractiveViewHandler,
-} from './src/components/InteractiveView';
+import {ElementRef, useEffect, useRef, useState} from 'react';
+import {Pressable, Text, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Person} from './src/components';
+import {InteractiveView} from './src/components/InteractiveView';
 import {HALF_SIZE, NODE_CENTER, NODE_SIZE, SIZE} from './src/constants';
 import {useTree} from './src/hooks';
 import {PersonNode} from './src/models/TreeViewModel';
+import {Position} from './src/types';
 
 const mockedNode: PersonNode = {
   id: '1',
@@ -42,6 +42,9 @@ const mockedNode: PersonNode = {
 const App = () => {
   const interactiveViewRef = useRef<ElementRef<typeof InteractiveView>>();
   const {data, setFocusedNode} = useTree();
+  const [nodeActionsPressed, setShowNodeActions] = useState<PersonNode | null>(
+    null,
+  );
 
   const node = mockedNode;
 
@@ -65,27 +68,45 @@ const App = () => {
     } as PersonNode);
   };
 
-  console.log({nodes: data.nodes});
-
   return (
-    <InteractiveView size={SIZE} ref={interactiveViewRef}>
+    <InteractiveView
+      size={SIZE}
+      ref={interactiveViewRef}
+      onMove={() => {
+        setShowNodeActions(null);
+      }}>
       {data.nodes.map(node => {
+        console.log('INSIDE MAP: ', {node});
         return (
-          <View
-            style={{
-              transform: [
-                {translateX: node.position!.x},
-                {translateY: node.position!.y},
-              ],
-
-              height: NODE_SIZE,
-              width: NODE_SIZE,
-              backgroundColor: 'red',
-            }}>
-            <Text>{node.name}</Text>
-          </View>
+          <Person
+            key={node.id}
+            value={node}
+            onLongPress={() => setShowNodeActions(node)}
+          />
         );
       })}
+
+      {!!nodeActionsPressed && (
+        <TouchableOpacity
+          style={{
+            transform: [
+              {translateY: nodeActionsPressed.position!.y},
+              {translateX: nodeActionsPressed.position!.x},
+            ],
+            height: NODE_SIZE,
+            width: NODE_SIZE,
+            backgroundColor: 'blue',
+            zIndex: 15,
+          }}
+          onPress={() => {
+            console.log('touch');
+          }}
+          onLongPress={() => {
+            console.log('LONG PRESS');
+          }}>
+          <Text>Options</Text>
+        </TouchableOpacity>
+      )}
     </InteractiveView>
   );
 };
