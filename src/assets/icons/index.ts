@@ -5,6 +5,7 @@ import search from './search.svg';
 import treeLogo from './treeLogo.svg';
 import person from './person.svg';
 import calendar from './calendar.svg';
+import google from './google.svg';
 
 export const icons = {
   add,
@@ -14,4 +15,5 @@ export const icons = {
   treeLogo,
   person,
   calendar,
+  google,
 };

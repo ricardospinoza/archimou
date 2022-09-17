@@ -1,11 +1,16 @@
-import {AddFamiliar, Home, Profile, FamiliarRegister} from '../pages';
+import {AddFamiliar, Home, Profile, FamiliarRegister, Login} from '../pages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
 export const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="Home"
         component={Home}
