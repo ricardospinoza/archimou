@@ -6,9 +6,13 @@ import {
   TextContainer,
 } from './styles';
 
-export const GoogleSignInButton = () => {
+interface GoogleSignInButtonProps {
+  onSignIn: () => void;
+}
+
+export const GoogleSignInButton = ({onSignIn}: GoogleSignInButtonProps) => {
   return (
-    <Container>
+    <Container onPress={onSignIn}>
       <IconContainer>
         <GoogleIcon />
       </IconContainer>

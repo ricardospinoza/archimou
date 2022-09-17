@@ -1,4 +1,11 @@
-import {AddFamiliar, Home, Profile, FamiliarRegister, Login} from '../pages';
+import {
+  AddFamiliar,
+  Home,
+  Profile,
+  FamiliarRegister,
+  Login,
+  Register,
+} from '../pages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
@@ -10,6 +17,15 @@ export const Router = () => {
         name="Login"
         component={Login}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        options={{
+          headerTitle: '',
+          headerTintColor: '#8c59b5',
+          headerShadowVisible: false,
+        }}
       />
       <Stack.Screen
         name="Home"
