@@ -3,10 +3,14 @@ import defaultAvatar from '../../assets/default-avatar.png';
 import {useState} from 'react';
 import {launchImageLibrary} from 'react-native-image-picker';
 
-interface ProfilePictureInput {}
+interface ProfilePictureInput {
+  photoUrl: string;
+}
 
-export const ProfilePictureInput = ({}: ProfilePictureInput) => {
-  const [imageSource, setImageSource] = useState(defaultAvatar);
+export const ProfilePictureInput = ({photoUrl}: ProfilePictureInput) => {
+  const [imageSource, setImageSource] = useState(
+    !!photoUrl ? {uri: photoUrl} : defaultAvatar,
+  );
 
   const getImage = async () => {
     const {assets} = await launchImageLibrary({

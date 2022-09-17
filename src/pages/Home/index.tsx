@@ -9,46 +9,16 @@ import {HALF_SIZE, NODE_CENTER, SIZE} from '../../constants';
 import {useTree} from '../../hooks';
 import {Position} from '../../types';
 import {PersonNode} from '../../models/TreeViewModel';
-import {useIsFocused} from '@react-navigation/native';
-
-const mockedNode: PersonNode = {
-  id: '1',
-  name: 'Eu',
-  photo: 'https://avatars.githubusercontent.com/u/55005400?v=4',
-  relations: [
-    {
-      id: '2',
-      type: 'Parent',
-    },
-    {
-      id: '3',
-      type: 'Parent',
-    },
-    {
-      id: '4',
-      type: 'Children',
-    },
-    {
-      id: '5',
-      type: 'Children',
-    },
-    // {
-    //   id: '6',
-    //   type: 'Children',
-    // },
-    {
-      id: '7',
-      type: 'Children',
-    },
-  ],
-};
+import {useIsFocused, useRoute} from '@react-navigation/native';
 
 export const Home = () => {
   const interactiveViewRef = useRef<ElementRef<typeof InteractiveView>>();
   const {data, setFocusedNode, setMainNode} = useTree();
   const [pressedNode, setPressedNode] = useState<PersonNode | null>(null);
 
-  const node = mockedNode;
+  const {
+    params: {node},
+  } = useRoute();
 
   const screenCenter = {
     x: HALF_SIZE + NODE_CENTER.x,

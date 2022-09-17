@@ -5,6 +5,7 @@ import {
   FamiliarRegister,
   Login,
   Register,
+  Splash,
 } from '../pages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -12,7 +13,12 @@ const Stack = createNativeStackNavigator();
 
 export const Router = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="Splash">
+      <Stack.Screen
+        name="Splash"
+        component={Splash}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="Login"
         component={Login}

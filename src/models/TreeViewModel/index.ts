@@ -8,6 +8,7 @@ export type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
 export interface PersonNode {
   id: string;
   name: string;
+  birthdate: string;
   photo: string;
   relations: {id: string; type: FamiliarTypes}[];
   position?: Position;

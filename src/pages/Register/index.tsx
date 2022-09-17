@@ -3,27 +3,34 @@ import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
+import {createUserNode} from '../../service';
 import {Container, Continue, Footer, Form} from './styles';
 export const Register = () => {
-  const [name, setName] = useState('');
-  const [date, setDate] = useState('');
+  const {
+    params: {user},
+  } = useRoute();
+
+  const [name, setName] = useState(user.displayName);
+  const [birthdate, setDate] = useState('');
+  const [photo, setPhoto] = useState(
+    //TODO: change photo
+    user?.photoURL?.replaceAll('s96-c', 's192-c') ?? '',
+  );
 
   const navigation = useNavigation();
 
-  const handleSubmit = () => {
-    console.log({
-      name,
-      date,
+  const handleSubmit = async () => {
+    await createUserNode(node);
+    navigation.navigate('Home', {
+      node,
     });
-
-    navigation.navigate('Home');
   };
 
   return (
     <>
       <ScrollView>
         <Container>
-          <ProfilePictureInput />
+          <ProfilePictureInput photoUrl={photo} />
           <Form>
             <Input
               value={name}
@@ -32,7 +39,7 @@ export const Register = () => {
               placeholder="Nome *"
             />
             <Input
-              value={date}
+              value={birthdate}
               onChangeText={setDate}
               iconName="calendar"
               placeholder="Data de Nascimento *"
