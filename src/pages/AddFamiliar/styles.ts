@@ -1,5 +1,6 @@
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
+import {BaseButton} from '../../components';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
@@ -7,39 +8,19 @@ export const Container = styled.SafeAreaView`
   justify-content: center;
 `;
 
-interface SelectButtonProps {
+interface OptionProps {
   selected: boolean;
 }
 
-export const SelectButton = styled.Pressable<SelectButtonProps>`
-  width: 90%;
-  height: 60px;
+export const Option = styled(BaseButton).attrs(() => ({
+  textStyle: {
+    color: '#8c59b5',
+  },
+}))<OptionProps>`
   border: 4px solid #8c59b5;
-  border-radius: 8px;
-  margin: 10px 0;
-  justify-content: center;
-  padding: 10px;
+  align-items: flex-start;
+  background-color: ${({selected}) => (selected ? '#8c59b5' : 'white')};
   opacity: ${({selected}) => (selected ? 0.5 : 1)};
-  background-color: ${({selected}) => (selected ? '#8c59b5' : 1)}; ;
-`;
-export const SelectText = styled.Text`
-  font-size: 24px;
-  color: #8c59b5;
-`;
-export const ContinueButton = styled.TouchableOpacity`
-  width: 90%;
-  height: 60px;
-  border: 4px solid #8c59b5;
-  background-color: #8c59b5;
-  border-radius: 8px;
-  margin: 10px 0;
-  justify-content: center;
-  padding: 10px;
-  align-items: center;
-`;
-export const ContinueText = styled.Text`
-  font-size: 24px;
-  color: white;
 `;
 
 export const Options = styled.View`
@@ -48,3 +29,5 @@ export const Options = styled.View`
   align-items: center;
   justify-content: center;
 `;
+
+export const Continue = styled(BaseButton)``;

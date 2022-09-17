@@ -30,7 +30,7 @@ export const Lines = ({lines}: LinesProps) => {
               position: 'absolute',
               height: 2,
               width: lineWidth,
-              backgroundColor: '#7E7A82',
+              backgroundColor: '#8C59B5',
               transform: [
                 {translateY: anchorPoint.y - 1 / 2},
                 {translateX: anchorPoint.x - lineWidth / 2},

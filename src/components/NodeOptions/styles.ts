@@ -9,7 +9,7 @@ interface ContainerProps {
 }
 
 export const Container = styled(LinearGradient).attrs<ContainerProps>(() => ({
-  colors: ['#f48bf8', '#ee81ec', '#c47bd8', '#6b7ce8', '#7256ce', '#8000FF'],
+  colors: ['#BB93DC', '#DDD5E4', '#C0A5D5', '#8C59B5', '#8C59B5', '#8C59B5'],
   start: {x: 0.0, y: 0.0},
   end: {x: 1.0, y: 1.0},
 }))<ContainerProps>`

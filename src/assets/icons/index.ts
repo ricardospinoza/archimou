@@ -3,6 +3,7 @@ import user from './user.svg';
 import chat from './chat.svg';
 import search from './search.svg';
 import treeLogo from './treeLogo.svg';
+import person from './person.svg';
 
 export const icons = {
   add,
@@ -10,4 +11,5 @@ export const icons = {
   chat,
   search,
   treeLogo,
+  person,
 };

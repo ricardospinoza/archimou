@@ -1,56 +1,62 @@
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {useState} from 'react';
 import {FamiliarTypes} from '../../models/TreeViewModel';
 import {
   SelectButton,
   SelectText,
   Container,
-  ContinueButton,
-  ContinueText,
   Options,
+  Continue,
+  Option,
 } from './styles';
 
 export const AddFamiliar = () => {
-  const [familiarType, setFamiliarType] = useState<FamiliarTypes>();
+  const [relationType, setRelationType] = useState<FamiliarTypes>();
+
+  const navigation = useNavigation();
 
   const {
-    params: {node},
+    params: {node}, //FIXME: types
   } = useRoute();
 
   const handleSelectFamiliarType = (familiarType: FamiliarTypes) => () => {
-    setFamiliarType(familiarType);
+    setRelationType(familiarType);
   };
 
-  const handleContinue = () => {};
+  const handleContinue = () => {
+    //TODO: think a way to find if it's already on platform for just add, otherwise keep moving to register
+    navigation.navigate('FamiliarRegister', {
+      node,
+      relationType,
+    });
+  };
 
   return (
     <Container>
       <Options>
-        <SelectButton
+        <Option
+          label={`Pai/Mãe de ${node.name}`}
           onPress={handleSelectFamiliarType('Parent')}
-          selected={familiarType === 'Parent'}>
-          <SelectText>Pai/Mãe de {node.name}</SelectText>
-        </SelectButton>
-        <SelectButton
+          selected={relationType === 'Parent'}
+        />
+        <Option
+          label={`Filho/Filha de ${node.name}`}
           onPress={handleSelectFamiliarType('Children')}
-          selected={familiarType === 'Children'}>
-          <SelectText>Filho/Filha de {node.name}</SelectText>
-        </SelectButton>
-        <SelectButton
+          selected={relationType === 'Children'}
+        />
+        <Option
+          label={`Irmão/Irmã de ${node.name}`}
           onPress={handleSelectFamiliarType('Sibling')}
-          selected={familiarType === 'Sibling'}>
-          <SelectText>Irmão/Irmã de {node.name}</SelectText>
-        </SelectButton>
-        <SelectButton
+          selected={relationType === 'Sibling'}
+        />
+        <Option
+          label={`Parceiro(a) de ${node.name}`}
           onPress={handleSelectFamiliarType('Partner')}
-          selected={familiarType === 'Partner'}>
-          <SelectText>Parceiro(a) de {node.name}</SelectText>
-        </SelectButton>
+          selected={relationType === 'Partner'}
+        />
       </Options>
 
-      <ContinueButton onPress={handleContinue}>
-        <ContinueText>Continuar</ContinueText>
-      </ContinueButton>
+      <Continue label={'Continuar'} onPress={handleContinue} />
     </Container>
   );
 };

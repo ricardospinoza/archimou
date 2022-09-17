@@ -5,3 +5,6 @@ export {NodeOptions} from './NodeOptions';
 export {Lines} from './Lines';
 export {Icon} from './Icon';
 export {Dock} from './Dock';
+export {BaseButton} from './BaseButton';
+export {ProfilePictureInput} from './ProfilePictureInput';
+export {Input} from './Input';

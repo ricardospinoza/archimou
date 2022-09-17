@@ -14,11 +14,12 @@ export const NodeOptions = ({nodePressed}: NodeOptionsProps) => {
 
   const goToAddNewFamiliar = () => {
     navigation.navigate('AddFamiliar', {
+      //FIXME: types
       node: nodePressed,
     });
   };
   const goToProfile = () => {
-    navigation.navigate('Profile');
+    navigation.navigate('Profile'); //FIXME: types
   };
 
   return !!nodePressed ? (
