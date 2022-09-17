@@ -4,7 +4,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
 import {Container, Continue, Footer, Form} from './styles';
-import {StackActions} from '@react-navigation/native';
 export const Register = () => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
