@@ -25,11 +25,11 @@ export const Container = styled(LinearGradient).attrs<ContainerProps>(() => ({
   z-index: 20;
 `;
 
-export const PressableContainer = styled.Pressable`
+export const Base = styled.TouchableOpacity`
   height: ${NODE_SIZE * 0.9}px;
   width: ${NODE_SIZE * 0.9}px;
   border-radius: ${(NODE_SIZE * 0.9) / 2}px;
-  z-index: 20;
+  z-index: 50;
   align-items: center;
   justify-content: center;
 `;

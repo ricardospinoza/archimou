@@ -66,12 +66,6 @@ export const InteractiveView = forwardRef<
     ],
   }));
 
-  const derivated = useDerivedValue(() => {
-    return x.value !== initialValue.value.x;
-  });
-
-  console.log({derivated});
-
   useImperativeHandle(ref, () => ({
     centerView,
   }));
@@ -102,7 +96,7 @@ export const InteractiveView = forwardRef<
               } as StyleSheet.NamedStyles<{}>,
               animatedStyle,
             ]}
-            onTouchStart={onMove}>
+            onTouchCancel={onMove}>
             {children}
           </Animated.View>
         </GestureDetector>
