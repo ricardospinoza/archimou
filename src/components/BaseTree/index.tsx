@@ -1,14 +1,23 @@
+import {SIZE} from '../../constants';
 import {PersonNode} from '../../models/TreeViewModel';
+import {Line} from '../../types';
+import {Lines} from '../Lines';
 import {Person} from '../Person';
 import {Container} from './styles';
 
 interface NodesProps {
   nodes: PersonNode[];
+  lines: Line[];
   onLongNodePress: (node: PersonNode) => void;
   onNodePress: (node: PersonNode) => void;
 }
 
-export const Nodes = ({nodes, onLongNodePress, onNodePress}: NodesProps) => {
+export const BaseTree = ({
+  nodes,
+  lines,
+  onLongNodePress,
+  onNodePress,
+}: NodesProps) => {
   return (
     <Container>
       {nodes.map(node => (
@@ -19,6 +28,7 @@ export const Nodes = ({nodes, onLongNodePress, onNodePress}: NodesProps) => {
           onPress={() => onNodePress(node)}
         />
       ))}
+      <Lines lines={lines} />
     </Container>
   );
 };

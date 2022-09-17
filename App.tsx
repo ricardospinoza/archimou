@@ -1,13 +1,13 @@
 import {ElementRef, Ref, useEffect, useRef, useState} from 'react';
-import {Pressable, Text, View} from 'react-native';
-import {NodeOptions, Nodes, Person} from './src/components';
+import {BaseTree, NodeOptions} from './src/components';
 import {
   InteractiveView,
   InteractiveViewHandler,
 } from './src/components/InteractiveView';
-import {HALF_SIZE, NODE_CENTER, NODE_SIZE, SIZE} from './src/constants';
+import {HALF_SIZE, NODE_CENTER, SIZE} from './src/constants';
 import {useTree} from './src/hooks';
 import {PersonNode} from './src/models/TreeViewModel';
+import {Position} from './src/types';
 const mockedNode: PersonNode = {
   id: '1',
   name: 'Eu',
@@ -29,10 +29,10 @@ const mockedNode: PersonNode = {
       id: '5',
       type: 'Children',
     },
-    {
-      id: '6',
-      type: 'Children',
-    },
+    // {
+    //   id: '6',
+    //   type: 'Children',
+    // },
     {
       id: '7',
       type: 'Children',
@@ -57,14 +57,15 @@ const App = () => {
   }, []);
 
   const centerMainNode = () => {
-    interactiveViewRef.current?.centerView({
-      x: screenCenter.x,
-      y: screenCenter.y,
-    });
+    centralizeView(screenCenter);
     setMainNode({
       ...node,
       position: {...screenCenter},
     } as PersonNode);
+  };
+
+  const centralizeView = (position: Position) => {
+    interactiveViewRef.current?.centerView(position);
   };
 
   const hideOptions = () => {
@@ -72,10 +73,7 @@ const App = () => {
   };
 
   const handleNodeClick = (node: PersonNode) => {
-    interactiveViewRef.current?.centerView({
-      x: node.position!.x,
-      y: node.position!.y,
-    });
+    centralizeView(node.position!);
     setFocusedNode(node);
   };
 
@@ -84,11 +82,13 @@ const App = () => {
       size={SIZE}
       ref={interactiveViewRef as Ref<InteractiveViewHandler>}
       onMove={hideOptions}>
-      <Nodes
+      <BaseTree
         nodes={data.nodes}
+        lines={data.lines}
         onLongNodePress={setPressedNode}
         onNodePress={handleNodeClick}
       />
+
       <NodeOptions nodePressed={pressedNode} />
     </InteractiveView>
   );

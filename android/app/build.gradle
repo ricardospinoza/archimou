@@ -256,6 +256,10 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    implementation(project(':react-native-svg')) {
+        exclude group: 'com.facebook.react', module: 'react-native'
+    }
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
