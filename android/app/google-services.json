@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "92146690602",
+    "project_id": "archimou-dev",
+    "storage_bucket": "archimou-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92146690602:android:4006e6d57fcaf4077f7153",
+        "android_client_info": {
+          "package_name": "com.archimou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92146690602-e5u9c32trvitgb6ntvg0v39h54es14tb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOVF-6fRQXs6W6QFe_pVz2F0yANCT2UzM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92146690602-e5u9c32trvitgb6ntvg0v39h54es14tb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
