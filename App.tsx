@@ -38,7 +38,7 @@ const mockedNode: PersonNode = {
 
 const App = () => {
   const interactiveViewRef = useRef<ElementRef<typeof InteractiveView>>();
-  const {data, setFocusedNode} = useTree();
+  const {data, setFocusedNode, setMainNode} = useTree();
   const [pressedNode, setPressedNode] = useState<PersonNode | null>(null);
 
   const node = mockedNode;
@@ -49,15 +49,15 @@ const App = () => {
   };
 
   useEffect(() => {
-    centerNode();
+    centerMainNode();
   }, []);
 
-  const centerNode = () => {
+  const centerMainNode = () => {
     interactiveViewRef.current?.centerView({
       x: screenCenter.x,
       y: screenCenter.y,
     });
-    setFocusedNode({
+    setMainNode({
       ...node,
       position: {...screenCenter},
     } as PersonNode);
@@ -67,9 +67,21 @@ const App = () => {
     setPressedNode(null);
   };
 
+  const handleNodeClick = (node: PersonNode) => {
+    interactiveViewRef.current?.centerView({
+      x: node.position!.x,
+      y: node.position!.y,
+    });
+    setFocusedNode(node);
+  };
+
   return (
     <InteractiveView size={SIZE} ref={interactiveViewRef} onMove={hideOptions}>
-      <Nodes nodes={data.nodes} onLongNodePress={setPressedNode} />
+      <Nodes
+        nodes={data.nodes}
+        onLongNodePress={setPressedNode}
+        onNodePress={handleNodeClick}
+      />
       <NodeOptions nodePressed={pressedNode} />
     </InteractiveView>
   );

@@ -8,15 +8,29 @@ export const useTree = () => {
   const [nodes, setNodes] = useState<PersonNode[]>([]);
   const [lines, setLines] = useState([]);
 
+  const setMainNode = (mainNode: PersonNode) => {
+    setNodes([mainNode]);
+    setFocusedNode(mainNode);
+  };
   const setFocusedNode = (focusedNode: PersonNode) => {
-    setNodes([focusedNode]);
     distributeNodesAndLines(focusedNode);
   };
 
   const distributeNodesAndLines = async (node: PersonNode) => {
     const distributedNodes = await tree.putFamiliarNodesByFocusedNode(node);
-    setNodes(nodes => [...nodes, ...distributedNodes]);
+
+    setNodes(nodes => {
+      const newNodes = distributedNodes.filter(
+        ({id}) => !nodes.some(n => n.id === id),
+      );
+      return [...nodes, ...newNodes];
+    });
   };
 
-  return {data: {nodes, lines}, distributeNodesAndLines, setFocusedNode};
+  return {
+    data: {nodes, lines},
+    distributeNodesAndLines,
+    setFocusedNode,
+    setMainNode,
+  };
 };

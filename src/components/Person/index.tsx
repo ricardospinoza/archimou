@@ -5,9 +5,10 @@ import {PersonNode} from '../../models/TreeViewModel';
 interface PersonProps {
   value: PersonNode;
   onLongPress: ((event: GestureResponderEvent) => void) | null | undefined;
+  onPress: ((event: GestureResponderEvent) => void) | null | undefined;
 }
 
-export const Person = ({value, onLongPress}: PersonProps) => {
+export const Person = ({value, onLongPress, onPress}: PersonProps) => {
   return (
     <Pressable
       key={value.id}
@@ -22,9 +23,7 @@ export const Person = ({value, onLongPress}: PersonProps) => {
         backgroundColor: 'red',
         zIndex: 10,
       }}
-      onPress={() => {
-        console.log('touch');
-      }}
+      onPress={onPress}
       onLongPress={onLongPress}>
       <Text>{value.name}</Text>
     </Pressable>

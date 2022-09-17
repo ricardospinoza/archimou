@@ -5,9 +5,10 @@ import {Person} from '../Person';
 interface NodesProps {
   nodes: PersonNode[];
   onLongNodePress: (node: PersonNode) => void;
+  onNodePress: (node: PersonNode) => void;
 }
 
-export const Nodes = ({nodes, onLongNodePress}: NodesProps) => {
+export const Nodes = ({nodes, onLongNodePress, onNodePress}: NodesProps) => {
   return (
     <View
       style={{
@@ -21,6 +22,7 @@ export const Nodes = ({nodes, onLongNodePress}: NodesProps) => {
             key={node.id}
             value={node}
             onLongPress={() => onLongNodePress(node)}
+            onPress={() => onNodePress(node)}
           />
         );
       })}
