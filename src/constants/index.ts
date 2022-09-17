@@ -8,3 +8,16 @@ export const NODE_CENTER = {
 };
 export const SIZE = height * 10;
 export const HALF_SIZE = SIZE / 2;
+
+export const DATE_MASK = [
+  /\d/,
+  /\d/,
+  '/',
+  /\d/,
+  /\d/,
+  '/',
+  /\d/,
+  /\d/,
+  /\d/,
+  /\d/,
+];

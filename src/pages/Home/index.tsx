@@ -9,6 +9,7 @@ import {HALF_SIZE, NODE_CENTER, SIZE} from '../../constants';
 import {useTree} from '../../hooks';
 import {Position} from '../../types';
 import {PersonNode} from '../../models/TreeViewModel';
+import {useIsFocused} from '@react-navigation/native';
 
 const mockedNode: PersonNode = {
   id: '1',
@@ -54,9 +55,17 @@ export const Home = () => {
     y: HALF_SIZE + NODE_CENTER.y,
   };
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     centerMainNode();
   }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      setPressedNode(null);
+    }
+  }, [isFocused]);
 
   const centerMainNode = () => {
     centralizeView(screenCenter);

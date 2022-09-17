@@ -1,3 +1,4 @@
+import MaskInput from 'react-native-mask-input';
 import styled from 'styled-components/native';
 
 export const InputContainer = styled.View`
@@ -12,7 +13,7 @@ export const InputContainer = styled.View`
   align-items: center;
 `;
 
-export const TextInput = styled.TextInput`
+export const TextInput = styled(MaskInput)`
   color: #8c59b5;
   font-size: 20px;
 `;
