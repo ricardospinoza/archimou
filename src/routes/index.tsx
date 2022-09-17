@@ -12,7 +12,18 @@ export const Router = () => {
         options={{headerShown: false}}
       />
 
-      <Stack.Screen name="AddFamiliar" component={AddFamiliar} />
+      <Stack.Screen
+        name="AddFamiliar"
+        component={AddFamiliar}
+        options={{
+          headerTitle: 'Quem é essa pessoa?',
+          headerTintColor: '#ffffff',
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#8c59b5',
+          },
+        }}
+      />
       <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );

@@ -13,7 +13,7 @@ export const Container = styled.View`
   height: 60px;
   padding: 0 10px;
 `;
-export const Center = styled.View`
+export const Center = styled.Pressable`
   height: 80px;
   width: 80px;
   border-radius: 40px;

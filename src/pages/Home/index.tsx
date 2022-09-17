@@ -94,7 +94,7 @@ export const Home = () => {
 
         <NodeOptions nodePressed={pressedNode} />
       </InteractiveView>
-      <Dock />
+      <Dock onTreePress={centerMainNode} />
     </>
   );
 };
