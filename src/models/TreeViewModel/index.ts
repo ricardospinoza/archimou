@@ -3,7 +3,7 @@ import {getUserTree} from '../../service';
 import {Position} from '../../types';
 import {DistributeService} from './DistributeService';
 
-type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
+export type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
 
 export interface PersonNode {
   id: string;

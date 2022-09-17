@@ -1,3 +1,6 @@
+import {useRoute} from '@react-navigation/native';
+import {useState} from 'react';
+import {FamiliarTypes} from '../../models/TreeViewModel';
 import {
   SelectButton,
   SelectText,
@@ -8,24 +11,44 @@ import {
 } from './styles';
 
 export const AddFamiliar = () => {
+  const [familiarType, setFamiliarType] = useState<FamiliarTypes>();
+
+  const {
+    params: {node},
+  } = useRoute();
+
+  const handleSelectFamiliarType = (familiarType: FamiliarTypes) => () => {
+    setFamiliarType(familiarType);
+  };
+
+  const handleContinue = () => {};
+
   return (
     <Container>
       <Options>
-        <SelectButton>
-          <SelectText>Pai/Mãe de Fulano</SelectText>
+        <SelectButton
+          onPress={handleSelectFamiliarType('Parent')}
+          selected={familiarType === 'Parent'}>
+          <SelectText>Pai/Mãe de {node.name}</SelectText>
         </SelectButton>
-        <SelectButton>
-          <SelectText>Filho/Filha de Fulano</SelectText>
+        <SelectButton
+          onPress={handleSelectFamiliarType('Children')}
+          selected={familiarType === 'Children'}>
+          <SelectText>Filho/Filha de {node.name}</SelectText>
         </SelectButton>
-        <SelectButton>
-          <SelectText>Irmão/Irmã de Fulano</SelectText>
+        <SelectButton
+          onPress={handleSelectFamiliarType('Sibling')}
+          selected={familiarType === 'Sibling'}>
+          <SelectText>Irmão/Irmã de {node.name}</SelectText>
         </SelectButton>
-        <SelectButton>
-          <SelectText>Parceiro de Fulano</SelectText>
+        <SelectButton
+          onPress={handleSelectFamiliarType('Partner')}
+          selected={familiarType === 'Partner'}>
+          <SelectText>Parceiro(a) de {node.name}</SelectText>
         </SelectButton>
       </Options>
 
-      <ContinueButton>
+      <ContinueButton onPress={handleContinue}>
         <ContinueText>Continuar</ContinueText>
       </ContinueButton>
     </Container>

@@ -13,7 +13,9 @@ export const NodeOptions = ({nodePressed}: NodeOptionsProps) => {
   const navigation = useNavigation();
 
   const goToAddNewFamiliar = () => {
-    navigation.navigate('AddFamiliar');
+    navigation.navigate('AddFamiliar', {
+      node: nodePressed,
+    });
   };
   const goToProfile = () => {
     navigation.navigate('Profile');
