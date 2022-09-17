@@ -39,6 +39,25 @@ const mockData: PersonNode[] = [
   {
     id: '3',
     name: 'Mae',
+    relations: [
+      {
+        id: '9',
+        type: 'Parent',
+      },
+      {
+        id: '10',
+        type: 'Parent',
+      },
+    ],
+  },
+  {
+    id: '9',
+    name: 'Pai da Mae',
+    relations: [],
+  },
+  {
+    id: '10',
+    name: 'Mae da Mae',
     relations: [],
   },
   {
@@ -59,6 +78,16 @@ const mockData: PersonNode[] = [
   {
     id: '7',
     name: 'Estranho',
+    relations: [
+      {
+        id: '8',
+        type: 'Children',
+      },
+    ],
+  },
+  {
+    id: '8',
+    name: 'Filho do estranho',
     relations: [],
   },
 ];

@@ -1,13 +1,17 @@
-import {ElementRef, useEffect, useRef, useState} from 'react';
+import {ElementRef, Ref, useEffect, useRef, useState} from 'react';
 import {Pressable, Text, View} from 'react-native';
 import {NodeOptions, Nodes, Person} from './src/components';
-import {InteractiveView} from './src/components/InteractiveView';
+import {
+  InteractiveView,
+  InteractiveViewHandler,
+} from './src/components/InteractiveView';
 import {HALF_SIZE, NODE_CENTER, NODE_SIZE, SIZE} from './src/constants';
 import {useTree} from './src/hooks';
 import {PersonNode} from './src/models/TreeViewModel';
 const mockedNode: PersonNode = {
   id: '1',
   name: 'Eu',
+  photo: 'https://avatars.githubusercontent.com/u/55005400?v=4',
   relations: [
     {
       id: '2',
@@ -76,7 +80,10 @@ const App = () => {
   };
 
   return (
-    <InteractiveView size={SIZE} ref={interactiveViewRef} onMove={hideOptions}>
+    <InteractiveView
+      size={SIZE}
+      ref={interactiveViewRef as Ref<InteractiveViewHandler>}
+      onMove={hideOptions}>
       <Nodes
         nodes={data.nodes}
         onLongNodePress={setPressedNode}

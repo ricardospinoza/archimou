@@ -8,8 +8,9 @@ type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
 export interface PersonNode {
   id: string;
   name: string;
-  position?: Position;
+  photo: string;
   relations: {id: string; type: FamiliarTypes}[];
+  position?: Position;
 }
 
 export class TreeViewModel {
