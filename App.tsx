@@ -1,5 +1,6 @@
 import {ElementRef, Ref, useEffect, useRef, useState} from 'react';
-import {BaseTree, NodeOptions} from './src/components';
+import {Text, View} from 'react-native';
+import {BaseTree, Icon, NodeOptions} from './src/components';
 import {
   InteractiveView,
   InteractiveViewHandler,

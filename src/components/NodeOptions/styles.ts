@@ -30,4 +30,6 @@ export const PressableContainer = styled.Pressable`
   width: ${NODE_SIZE * 0.9}px;
   border-radius: ${(NODE_SIZE * 0.9) / 2}px;
   z-index: 20;
+  align-items: center;
+  justify-content: center;
 `;
