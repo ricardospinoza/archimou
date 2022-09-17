@@ -1,6 +1,6 @@
 import {ElementRef, Ref, useEffect, useRef, useState} from 'react';
 import {Text, View} from 'react-native';
-import {BaseTree, Icon, NodeOptions} from '../../components';
+import {BaseTree, Dock, Icon, NodeOptions} from '../../components';
 import {
   InteractiveView,
   InteractiveViewHandler,
@@ -80,18 +80,21 @@ export const Home = () => {
   };
 
   return (
-    <InteractiveView
-      size={SIZE}
-      ref={interactiveViewRef as Ref<InteractiveViewHandler>}
-      onMove={hideOptions}>
-      <BaseTree
-        nodes={data.nodes}
-        lines={data.lines}
-        onLongNodePress={setPressedNode}
-        onNodePress={handleNodeClick}
-      />
+    <>
+      <InteractiveView
+        size={SIZE}
+        ref={interactiveViewRef as Ref<InteractiveViewHandler>}
+        onMove={hideOptions}>
+        <BaseTree
+          nodes={data.nodes}
+          lines={data.lines}
+          onLongNodePress={setPressedNode}
+          onNodePress={handleNodeClick}
+        />
 
-      <NodeOptions nodePressed={pressedNode} />
-    </InteractiveView>
+        <NodeOptions nodePressed={pressedNode} />
+      </InteractiveView>
+      <Dock />
+    </>
   );
 };
