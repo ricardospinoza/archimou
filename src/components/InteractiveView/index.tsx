@@ -102,7 +102,7 @@ export const InteractiveView = forwardRef<
               } as StyleSheet.NamedStyles<{}>,
               animatedStyle,
             ]}
-            onTouchMove={onMove}>
+            onTouchStart={onMove}>
             {children}
           </Animated.View>
         </GestureDetector>

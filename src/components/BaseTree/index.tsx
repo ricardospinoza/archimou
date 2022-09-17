@@ -1,4 +1,3 @@
-import {SIZE} from '../../constants';
 import {PersonNode} from '../../models/TreeViewModel';
 import {Line} from '../../types';
 import {Lines} from '../Lines';
