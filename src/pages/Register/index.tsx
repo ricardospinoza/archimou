@@ -11,16 +11,24 @@ export const Register = () => {
   } = useRoute();
 
   const [name, setName] = useState(user.displayName);
-  const [birthdate, setDate] = useState('');
+  const [birthDate, setDate] = useState('');
   const [photo, setPhoto] = useState(
-    //TODO: change photo
     user?.photoURL?.replaceAll('s96-c', 's192-c') ?? '',
   );
 
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
+    const node = {
+      id: user.uid,
+      name,
+      birthDate,
+      photo,
+      relations: [],
+    };
+
     await createUserNode(node);
+
     navigation.navigate('Home', {
       node,
     });
@@ -30,7 +38,7 @@ export const Register = () => {
     <>
       <ScrollView>
         <Container>
-          <ProfilePictureInput photoUrl={photo} />
+          <ProfilePictureInput photoUrl={photo} onChangePhoto={setPhoto} />
           <Form>
             <Input
               value={name}
@@ -39,7 +47,7 @@ export const Register = () => {
               placeholder="Nome *"
             />
             <Input
-              value={birthdate}
+              value={birthDate}
               onChangeText={setDate}
               iconName="calendar"
               placeholder="Data de Nascimento *"

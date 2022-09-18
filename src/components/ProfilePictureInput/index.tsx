@@ -5,9 +5,14 @@ import {launchImageLibrary} from 'react-native-image-picker';
 
 interface ProfilePictureInput {
   photoUrl: string;
+
+  onChangePhoto: (photoUrl: string) => void;
 }
 
-export const ProfilePictureInput = ({photoUrl}: ProfilePictureInput) => {
+export const ProfilePictureInput = ({
+  photoUrl,
+  onChangePhoto,
+}: ProfilePictureInput) => {
   const [imageSource, setImageSource] = useState(
     !!photoUrl ? {uri: photoUrl} : defaultAvatar,
   );
@@ -19,6 +24,7 @@ export const ProfilePictureInput = ({photoUrl}: ProfilePictureInput) => {
     });
     const {uri = ''} = assets?.[0];
     setImageSource({uri});
+    onChangePhoto(uri);
   };
 
   return (

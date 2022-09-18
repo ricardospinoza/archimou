@@ -9,41 +9,44 @@ export const useTree = () => {
   const [nodes, setNodes] = useState<PersonNode[]>([]);
   const [lines, setLines] = useState<Line[]>([]);
 
-  const setMainNode = (mainNode: PersonNode) => {
+  const setMainNode = async (mainNode: PersonNode) => {
     setNodes([mainNode]);
-    setFocusedNode(mainNode);
+    await setFocusedNode(mainNode);
   };
-  const setFocusedNode = (focusedNode: PersonNode) => {
-    distributeNodesAndLines(focusedNode);
+  const setFocusedNode = async (focusedNode: PersonNode) => {
+    await distributeNodesAndLines(focusedNode);
   };
 
   const distributeNodesAndLines = async (node: PersonNode) => {
     const distributedNodes = await tree.putFamiliarNodesByFocusedNode(node);
 
-    setNodes(nodes => {
-      const newNodes = filterNewNodes(nodes, distributedNodes);
+    setNodes(ns => {
+      const newNodes = filterNewNodes(ns, distributedNodes);
       const newLines = buildLinesFrom(node, newNodes);
+      console.log({newNodes, distributedNodes});
       setLines(lines => [...lines, ...newLines]);
-      return [...nodes, ...newNodes];
+      return [...ns, ...newNodes];
     });
   };
 
   const filterNewNodes = (
-    nodes: PersonNode[],
+    allNodes: PersonNode[],
     distributedNodes: PersonNode[],
   ) => {
-    return distributedNodes.filter(({id}) => !nodes.some(n => n.id === id));
+    return distributedNodes.filter(({id}) => !allNodes.some(n => n.id === id));
   };
 
   const buildLinesFrom = (fromNode: PersonNode, toNodes: PersonNode[]) => {
     return toNodes.map(newNode => ({
+      id: `${fromNode.id}_${newNode.id}`,
       from: fromNode.position!,
       to: newNode.position!,
     }));
   };
 
   return {
-    data: {nodes, lines},
+    nodes,
+    lines,
     distributeNodesAndLines,
     setFocusedNode,
     setMainNode,

@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import {useEffect} from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useEffect, useState} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import backgroundImage from '../../assets/background.png';
 import {Background} from './styles';
@@ -11,7 +11,7 @@ export const Splash = () => {
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
+    return subscriber;
   }, []);
 
   const handleAuthStateChanged = async (
@@ -28,7 +28,6 @@ export const Splash = () => {
       navigation.navigate('Login');
     } else {
       const userNode = await getUserNode(user.uid);
-      console.log({userNode});
 
       if (!userNode) {
         navigation.navigate('Register', {

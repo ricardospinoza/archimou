@@ -1,6 +1,5 @@
 import {ElementRef, Ref, useEffect, useRef, useState} from 'react';
-import {Text, View} from 'react-native';
-import {BaseTree, Dock, Icon, NodeOptions} from '../../components';
+import {BaseTree, Dock, NodeOptions} from '../../components';
 import {
   InteractiveView,
   InteractiveViewHandler,
@@ -9,16 +8,15 @@ import {HALF_SIZE, NODE_CENTER, SIZE} from '../../constants';
 import {useTree} from '../../hooks';
 import {Position} from '../../types';
 import {PersonNode} from '../../models/TreeViewModel';
-import {useIsFocused, useRoute} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
+import {useNode} from './useNode';
 
 export const Home = () => {
   const interactiveViewRef = useRef<ElementRef<typeof InteractiveView>>();
-  const {data, setFocusedNode, setMainNode} = useTree();
+  const {nodes, lines, setFocusedNode, setMainNode} = useTree();
   const [pressedNode, setPressedNode] = useState<PersonNode | null>(null);
 
-  const {
-    params: {node},
-  } = useRoute();
+  const node = useNode();
 
   const screenCenter = {
     x: HALF_SIZE + NODE_CENTER.x,
@@ -28,14 +26,15 @@ export const Home = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    centerMainNode();
-  }, []);
+    initialize();
+  }, [isFocused, node]);
 
-  useEffect(() => {
+  const initialize = async () => {
     if (isFocused) {
+      centerMainNode();
       setPressedNode(null);
     }
-  }, [isFocused]);
+  };
 
   const centerMainNode = () => {
     centralizeView(screenCenter);
@@ -65,8 +64,8 @@ export const Home = () => {
         ref={interactiveViewRef as Ref<InteractiveViewHandler>}
         onMove={hideOptions}>
         <BaseTree
-          nodes={data.nodes}
-          lines={data.lines}
+          nodes={nodes}
+          lines={lines}
           onLongNodePress={setPressedNode}
           onNodePress={handleNodeClick}
         />

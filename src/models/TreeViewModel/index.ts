@@ -8,10 +8,15 @@ export type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
 export interface PersonNode {
   id: string;
   name: string;
-  birthdate: string;
+  birthDate: string;
   photo: string;
-  relations: {id: string; type: FamiliarTypes}[];
+  relations: Relation[];
   position?: Position;
+}
+
+export interface Relation {
+  id: string;
+  type: FamiliarTypes;
 }
 
 export class TreeViewModel {
@@ -37,7 +42,7 @@ export class TreeViewModel {
   }
 
   async putFamiliarNodesByFocusedNode(node: PersonNode) {
-    this.#data = await getUserTree(node.id);
+    this.#data = await getUserTree(node.relations);
     this.#nodeRef = node;
     this.#distribute.nodeRef = node;
 

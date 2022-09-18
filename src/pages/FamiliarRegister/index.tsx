@@ -5,22 +5,34 @@ import {Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
 import {Container, Continue, Footer, Form} from './styles';
 import {StackActions} from '@react-navigation/native';
+import {PersonNode} from '../../models/TreeViewModel';
+import {addFamiliarToNode, createFamiliar} from '../../service';
 export const FamiliarRegister = () => {
   const {
     params: {node, relationType},
   } = useRoute();
 
   const [name, setName] = useState('');
-  const [date, setDate] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [photo, setPhoto] = useState('');
 
   const navigation = useNavigation();
 
-  const handleSubmitNewFamiliar = () => {
-    console.log({
+  const handleSubmitNewFamiliar = async () => {
+    const tempId = `${node.id}_${relationType}_${name.trim()}`;
+
+    const newFamiliarNode = {
+      id: tempId,
       name,
-      date,
-      node,
-      relationType,
+      birthDate,
+      photo,
+      relations: [],
+    } as PersonNode;
+
+    await createFamiliar(newFamiliarNode);
+    await addFamiliarToNode(node, {
+      id: tempId,
+      type: relationType,
     });
 
     navigation.dispatch(StackActions.pop(2));
@@ -30,7 +42,7 @@ export const FamiliarRegister = () => {
     <>
       <ScrollView>
         <Container>
-          <ProfilePictureInput />
+          <ProfilePictureInput onChangePhoto={setPhoto} />
           <Form>
             <Input
               value={name}
@@ -39,8 +51,8 @@ export const FamiliarRegister = () => {
               placeholder="Nome *"
             />
             <Input
-              value={date}
-              onChangeText={setDate}
+              value={birthDate}
+              onChangeText={setBirthDate}
               iconName="calendar"
               placeholder="Data de Nascimento *"
               keyboardType="numbers-and-punctuation"
