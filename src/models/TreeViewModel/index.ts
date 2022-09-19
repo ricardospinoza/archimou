@@ -10,6 +10,7 @@ export interface PersonNode {
   name: string;
   birthDate: string;
   photo: string;
+  description?: string;
   relations: Relation[];
   position?: Position;
 }

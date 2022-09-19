@@ -21,7 +21,7 @@ export const BaseTree = ({
     <Container>
       {nodes.map(node => (
         <Person
-          key={node.id}
+          key={Math.random()}
           value={node}
           onLongPress={() => onLongNodePress(node)}
           onPress={() => onNodePress(node)}

@@ -2,16 +2,19 @@ import {Container, Photo, PressableContainer} from './styles';
 import defaultAvatar from '../../assets/default-avatar.png';
 import {useState} from 'react';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {StyledProps} from 'styled-components';
+import {ViewProps} from 'react-native';
 
 interface ProfilePictureInput {
   photoUrl: string;
-
-  onChangePhoto: (photoUrl: string) => void;
+  onChangePhoto?: (photoUrl: string) => void;
+  size?: number;
 }
 
 export const ProfilePictureInput = ({
   photoUrl,
   onChangePhoto,
+  size,
 }: ProfilePictureInput) => {
   const [imageSource, setImageSource] = useState(
     !!photoUrl ? {uri: photoUrl} : defaultAvatar,
@@ -28,9 +31,9 @@ export const ProfilePictureInput = ({
   };
 
   return (
-    <Container colors={[]}>
-      <PressableContainer onPress={getImage}>
-        <Photo source={imageSource} />
+    <Container colors={[]} size={size ?? 300}>
+      <PressableContainer onPress={getImage} size={size ?? 300}>
+        <Photo source={imageSource} size={size ?? 300} />
       </PressableContainer>
     </Container>
   );

@@ -25,7 +25,7 @@ export const Lines = ({lines}: LinesProps) => {
         const lineAngle = Math.PI + atan2(subY, subX);
         return (
           <View
-            key={Math.random()}
+            key={line.id + line.from.x + line.to.x + line.from.y + line.to.y}
             style={{
               position: 'absolute',
               height: 2,

@@ -24,7 +24,7 @@ export const Splash = () => {
     };
 
     const user = {displayName, uid, photoURL};
-    if (!user) {
+    if (!firebaseUser) {
       navigation.navigate('Login');
     } else {
       const userNode = await getUserNode(user.uid);

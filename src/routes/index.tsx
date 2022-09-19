@@ -60,7 +60,15 @@ export const Router = () => {
           headerShadowVisible: false,
         }}
       />
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerTitle: '',
+          headerTintColor: '#8c59b5',
+          headerShadowVisible: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };

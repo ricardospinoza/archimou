@@ -11,7 +11,12 @@ export const useTree = () => {
 
   const setMainNode = async (mainNode: PersonNode) => {
     setNodes([mainNode]);
-    await setFocusedNode(mainNode);
+    const distributedNodes = await tree.putFamiliarNodesByFocusedNode(mainNode);
+    setNodes(() => {
+      const newLines = buildLinesFrom(mainNode, distributedNodes);
+      setLines(newLines);
+      return [mainNode, ...distributedNodes];
+    });
   };
   const setFocusedNode = async (focusedNode: PersonNode) => {
     await distributeNodesAndLines(focusedNode);

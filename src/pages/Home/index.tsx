@@ -70,7 +70,7 @@ export const Home = () => {
           onNodePress={handleNodeClick}
         />
 
-        <NodeOptions nodePressed={pressedNode} />
+        <NodeOptions nodePressed={pressedNode} userId={node.id} />
       </InteractiveView>
       <Dock onTreePress={centerMainNode} />
     </>
