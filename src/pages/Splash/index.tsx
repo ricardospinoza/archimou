@@ -5,13 +5,23 @@ import backgroundImage from '../../assets/background.png';
 import {Background} from './styles';
 import {getUserNode} from '../../service';
 import {acc} from 'react-native-reanimated';
-
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 export const Splash = () => {
   const navigation = useNavigation();
 
+  const handleDynamicLink = link => {
+    console.log({link});
+  };
+
+  useEffect(() => {
+    dynamicLinks().getInitialLink().then(handleDynamicLink);
+  }, []);
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);
-    return subscriber;
+    return () => {
+      subscriber();
+    };
   }, []);
 
   const handleAuthStateChanged = async (

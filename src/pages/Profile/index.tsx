@@ -1,6 +1,8 @@
 import auth from '@react-native-firebase/auth';
 import {StackActions, useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {BaseButton} from '../../components';
 import {PersonNode} from '../../models/TreeViewModel';
 import {
   Container,
@@ -14,6 +16,8 @@ import {
   Footer,
   Content,
 } from './styles';
+import {useClipboard} from '@react-native-community/clipboard';
+import {Alert} from 'react-native';
 
 export const Profile = () => {
   const {params} = useRoute();
@@ -22,9 +26,20 @@ export const Profile = () => {
 
   const navigation = useNavigation();
 
+  const [link, setLink] = useClipboard();
+
   const handleSignOut = async () => {
     await auth().signOut();
     navigation.dispatch(StackActions.popToTop());
+  };
+
+  const buildLink = async () => {
+    const link = await dynamicLinks().buildLink({
+      link: 'https://archimou.com',
+      domainUriPrefix: 'https://archimou.page.link',
+    });
+    setLink(link);
+    Alert.alert('Link do convite enviado para area de transferencia');
   };
 
   return (
@@ -39,6 +54,7 @@ export const Profile = () => {
         </Header>
 
         <Content>
+          <BaseButton label="Convidar para a rede" onPress={buildLink} />
           {!!node.description && <Description>{node.description}</Description>}
         </Content>
         <Footer>

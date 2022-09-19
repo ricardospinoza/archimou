@@ -28,7 +28,6 @@ export const useTree = () => {
     setNodes(ns => {
       const newNodes = filterNewNodes(ns, distributedNodes);
       const newLines = buildLinesFrom(node, newNodes);
-      console.log({newNodes, distributedNodes});
       setLines(lines => [...lines, ...newLines]);
       return [...ns, ...newNodes];
     });
