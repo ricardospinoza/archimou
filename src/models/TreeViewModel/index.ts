@@ -32,7 +32,14 @@ export class TreeViewModel {
     const children = this.#getNodesByType('Children');
     const childrenWithPosition = this.#distribute.childrensPositions(children);
 
-    return [...parentsWithPosition, ...childrenWithPosition];
+    const sibling = this.#getNodesByType('Sibling');
+    const siblingWithPosition = this.#distribute.siblingsPositions(sibling);
+
+    return [
+      ...parentsWithPosition,
+      ...childrenWithPosition,
+      ...siblingWithPosition,
+    ];
   }
 
   #getNodesByType(familiarType: FamiliarTypes) {
