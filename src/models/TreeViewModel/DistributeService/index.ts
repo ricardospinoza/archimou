@@ -76,4 +76,20 @@ export class DistributeService {
 
     return siblingWithPositions;
   }
+
+  partnersPositions(siblings: PersonNode[]) {
+    const refPosition = this.#nodeRef.position!;
+
+    const siblingWithPositions = siblings.map((sibling, i) => {
+      const x = refPosition.x + NODE_SIZE * (i + 1);
+      const y = refPosition.y;
+      sibling.position = {
+        x,
+        y,
+      };
+      return sibling;
+    });
+
+    return siblingWithPositions;
+  }
 }

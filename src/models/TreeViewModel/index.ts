@@ -35,10 +35,14 @@ export class TreeViewModel {
     const sibling = this.#getNodesByType('Sibling');
     const siblingWithPosition = this.#distribute.siblingsPositions(sibling);
 
+    const partners = this.#getNodesByType('Partner');
+    const partnersWithPosition = this.#distribute.partnersPositions(partners);
+
     return [
       ...parentsWithPosition,
       ...childrenWithPosition,
       ...siblingWithPosition,
+      ...partnersWithPosition,
     ];
   }
 
