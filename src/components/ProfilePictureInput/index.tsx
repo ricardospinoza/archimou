@@ -32,7 +32,9 @@ export const ProfilePictureInput = ({
 
   return (
     <Container colors={[]} size={size ?? 300}>
-      <PressableContainer onPress={getImage} size={size ?? 300}>
+      <PressableContainer
+        onPress={onChangePhoto ? getImage : () => {}}
+        size={size ?? 300}>
         <Photo source={imageSource} size={size ?? 300} />
       </PressableContainer>
     </Container>

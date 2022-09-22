@@ -8,3 +8,4 @@ export {Dock} from './Dock';
 export {BaseButton} from './BaseButton';
 export {ProfilePictureInput} from './ProfilePictureInput';
 export {Input} from './Input';
+export {InvitationModal} from './InvitationModal';

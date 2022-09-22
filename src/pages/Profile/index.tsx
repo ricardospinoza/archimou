@@ -21,6 +21,7 @@ import {Alert} from 'react-native';
 
 export const Profile = () => {
   const {params} = useRoute();
+  const authUserId = params?.authUserId as PersonNode;
   const node = params?.node as PersonNode;
   const itsMe = params?.itsMe as boolean;
 
@@ -33,7 +34,7 @@ export const Profile = () => {
 
   const buildLink = async () => {
     const link = await dynamicLinks().buildLink({
-      link: `https://archimou.com?tempId=${node.id}`,
+      link: `https://archimou.com?tempId=${node.id}&userInviteId=${authUserId}`,
       domainUriPrefix: 'https://archimou.page.link/',
       android: {
         packageName: 'com.archimou',
@@ -44,9 +45,7 @@ export const Profile = () => {
     Alert.alert('Link do convite enviado para area de transferencia', link);
   };
 
-  //archimou.page.link/join?link=https%3A%2F%2Farchimou.com%3Fid%3Dquejo
-
-  https: return (
+  return (
     <ScrollView>
       <Container>
         <Header>

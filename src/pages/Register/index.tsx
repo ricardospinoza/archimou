@@ -3,7 +3,11 @@ import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
-import {createUserNode} from '../../service';
+import {
+  createUserNode,
+  deleteTempNode,
+  getDynamicLinkData,
+} from '../../service';
 import {Container, Continue, Footer, Form} from './styles';
 export const Register = () => {
   const {
@@ -26,6 +30,12 @@ export const Register = () => {
       photo,
       relations: [],
     };
+
+    const data = await getDynamicLinkData();
+
+    if (!!data?.tempId) {
+      await deleteTempNode(data.tempId);
+    }
 
     await createUserNode(node);
 

@@ -23,6 +23,7 @@ export const NodeOptions = ({nodePressed, userId}: NodeOptionsProps) => {
     navigation.navigate('Profile', {
       node: nodePressed,
       itsMe: userId === nodePressed?.id,
+      authUserId: userId,
     }); //FIXME: types
   };
 

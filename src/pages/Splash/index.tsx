@@ -3,27 +3,10 @@ import {useEffect, useState} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import backgroundImage from '../../assets/background.png';
 import {Background} from './styles';
-import {getUserNode} from '../../service';
-import dynamicLinks, {
-  FirebaseDynamicLinksTypes,
-} from '@react-native-firebase/dynamic-links';
-
-import parse from 'url-parse';
+import {getDynamicLinkData, getUserNode} from '../../service';
 
 export const Splash = () => {
   const navigation = useNavigation();
-
-  const handleDynamicLink = (
-    link: FirebaseDynamicLinksTypes.DynamicLink | null,
-  ) => {
-    console.log({link, url: link.url});
-    const {query} = parse(link?.url, true);
-    console.log({query});
-  };
-
-  useEffect(() => {
-    dynamicLinks().getInitialLink().then(handleDynamicLink);
-  }, []);
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);

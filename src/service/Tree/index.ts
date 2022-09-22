@@ -57,3 +57,36 @@ export const addFamiliarToNode = async (
     console.log(e);
   }
 };
+
+export const replaceFamiliarNode = async (
+  node: PersonNode,
+  {
+    tempId,
+    realId,
+  }: {
+    tempId: string;
+    realId: string;
+  },
+) => {
+  try {
+    const relations = [...node.relations];
+    const relationIndex = relations.findIndex(({id}) => id === tempId);
+
+    relations[relationIndex] = {
+      ...relations[relationIndex],
+      id: realId,
+    };
+
+    await firestore().collection('People').doc(node.id).update({
+      relations,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const deleteTempNode = async (tempId: string) => {
+  try {
+    await firestore().collection('People').doc(tempId).delete();
+  } catch (e) {}
+};
