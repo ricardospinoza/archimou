@@ -16,7 +16,7 @@ import {
   Footer,
   Content,
 } from './styles';
-import {useClipboard} from '@react-native-community/clipboard';
+import Clipboard from '@react-native-community/clipboard';
 import {Alert} from 'react-native';
 
 export const Profile = () => {
@@ -26,8 +26,6 @@ export const Profile = () => {
 
   const navigation = useNavigation();
 
-  const [link, setLink] = useClipboard();
-
   const handleSignOut = async () => {
     await auth().signOut();
     navigation.dispatch(StackActions.popToTop());
@@ -35,14 +33,20 @@ export const Profile = () => {
 
   const buildLink = async () => {
     const link = await dynamicLinks().buildLink({
-      link: 'https://archimou.com',
-      domainUriPrefix: 'https://archimou.page.link',
+      link: `https://archimou.com?tempId=${node.id}`,
+      domainUriPrefix: 'https://archimou.page.link/',
+      android: {
+        packageName: 'com.archimou',
+      },
     });
-    setLink(link);
-    Alert.alert('Link do convite enviado para area de transferencia');
+    Clipboard.setString(link);
+    console.log({link});
+    Alert.alert('Link do convite enviado para area de transferencia', link);
   };
 
-  return (
+  //archimou.page.link/join?link=https%3A%2F%2Farchimou.com%3Fid%3Dquejo
+
+  https: return (
     <ScrollView>
       <Container>
         <Header>
