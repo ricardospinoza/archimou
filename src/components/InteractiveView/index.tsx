@@ -78,6 +78,7 @@ export const InteractiveView = forwardRef<
 
     x.value = withTiming(-nodeCenter.x, {duration: 300});
     y.value = withTiming(-nodeCenter.y, {duration: 300});
+    scale.value = withTiming(1, {duration: 300});
   };
 
   return (

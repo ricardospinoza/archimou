@@ -101,14 +101,6 @@ export const Home = () => {
       Partner: 'Partner',
     } as {[key: FamiliarTypes]: FamiliarTypes};
 
-    console.log({
-      relation,
-      userInvitation,
-    });
-
-    console.log('RELATIONS: ', userInvitation?.relations);
-    console.log('TEMPID: ', tempId);
-
     await addFamiliarToNode(node, {
       id: userInvitation!.id,
       type: mapRelations[relation!.type],
@@ -120,6 +112,7 @@ export const Home = () => {
     });
 
     setShowInviteModal(false);
+    centerMainNode();
   };
 
   return (
