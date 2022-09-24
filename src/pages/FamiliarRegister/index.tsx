@@ -42,7 +42,7 @@ export const FamiliarRegister = () => {
     <>
       <ScrollView>
         <Container>
-          <ProfilePictureInput onChangePhoto={setPhoto} />
+          <ProfilePictureInput photoUrl={photo} onChangePhoto={setPhoto} />
           <Form>
             <Input
               value={name}

@@ -2,8 +2,7 @@ import {Container, Photo, PressableContainer} from './styles';
 import defaultAvatar from '../../assets/default-avatar.png';
 import {useState} from 'react';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {StyledProps} from 'styled-components';
-import {ViewProps} from 'react-native';
+import storage from '@react-native-firebase/storage';
 
 interface ProfilePictureInput {
   photoUrl: string;
@@ -21,13 +20,27 @@ export const ProfilePictureInput = ({
   );
 
   const getImage = async () => {
-    const {assets} = await launchImageLibrary({
-      selectionLimit: 50,
-      mediaType: 'photo',
-    });
-    const {uri = ''} = assets?.[0];
-    setImageSource({uri});
-    onChangePhoto(uri);
+    try {
+      const {assets} = await launchImageLibrary({
+        selectionLimit: 50,
+        mediaType: 'photo',
+        includeBase64: true,
+      });
+
+      if (!assets?.length) return;
+
+      const {uri = '', base64, fileName} = assets[0];
+
+      await storage().ref(`images/${fileName}`).putString(base64!, 'base64');
+      const url = await storage().ref(`images/${fileName}`).getDownloadURL();
+
+      console.log({url});
+
+      setImageSource({uri});
+      onChangePhoto(url);
+    } catch ({error}) {
+      console.log({error});
+    }
   };
 
   return (
