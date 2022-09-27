@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {NODE_SIZE} from '../../constants';
-import {motify} from 'moti';
+import {motify, MotiImage} from 'moti';
 
 interface ContainerProps {
   x: number;
@@ -41,7 +41,15 @@ export const PressableContainer = styled.Pressable`
   border-radius: ${(NODE_SIZE * 0.9) / 2}px;
 `;
 
-export const Photo = styled.Image`
+export const Photo = styled(MotiImage).attrs(() => ({
+  from: {scale: 0.97},
+  animate: {scale: 1.0},
+  transition: {
+    type: 'timing',
+    duration: 1500,
+    loop: true,
+  },
+}))`
   height: ${NODE_SIZE * 0.9}px;
   width: ${NODE_SIZE * 0.9}px;
   border-radius: ${(NODE_SIZE * 0.9) / 2}px;
