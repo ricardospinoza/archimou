@@ -1,7 +1,6 @@
-import {StyleSheet, View} from 'react-native';
-import Svg, {Line as SvgLine} from 'react-native-svg';
-import {NODE_CENTER, SIZE} from '../../constants';
+import {NODE_CENTER} from '../../constants';
 import {Line} from '../../types';
+import {LineColor, LineContainer} from './styles';
 
 interface LinesProps {
   lines: Line[];
@@ -10,36 +9,37 @@ interface LinesProps {
 const {sqrt, pow, abs, atan2} = Math;
 
 export const Lines = ({lines}: LinesProps) => {
+  const calculateLineProps = (line: Line) => {
+    const anchorPoint = {
+      x: line.from.x + NODE_CENTER.x,
+      y: line.from.y + NODE_CENTER.y,
+    };
+    const subX = line.from.x - line.to.x;
+    const subY = line.from.y - line.to.y;
+    const sumSquareX = pow(abs(subX), 2);
+    const sumSquareY = pow(abs(subY), 2);
+    const lineWidth = sqrt(sumSquareX + sumSquareY);
+    const lineAngle = Math.PI + atan2(subY, subX);
+
+    return {
+      anchorPoint,
+      lineWidth,
+      lineAngle,
+    };
+  };
+
   return (
     <>
       {lines.map(line => {
-        const anchorPoint = {
-          x: line.from.x + NODE_CENTER.x,
-          y: line.from.y + NODE_CENTER.y,
-        };
-        const subX = line.from.x - line.to.x;
-        const subY = line.from.y - line.to.y;
-        const sumSquareX = pow(abs(subX), 2);
-        const sumSquareY = pow(abs(subY), 2);
-        const lineWidth = sqrt(sumSquareX + sumSquareY);
-        const lineAngle = Math.PI + atan2(subY, subX);
+        const {anchorPoint, lineWidth, lineAngle} = calculateLineProps(line);
         return (
-          <View
+          <LineContainer
             key={line.id + line.from.x + line.to.x + line.from.y + line.to.y}
-            style={{
-              position: 'absolute',
-              height: 2,
-              width: lineWidth,
-              backgroundColor: '#8C59B5',
-              transform: [
-                {translateY: anchorPoint.y - 1 / 2},
-                {translateX: anchorPoint.x - lineWidth / 2},
-                {rotateZ: `${lineAngle}rad`},
-                {translateY: 1 / 2},
-                {translateX: lineWidth / 2},
-              ],
-            }}
-          />
+            anchorPoint={anchorPoint}
+            lineAngle={lineAngle}
+            lineWidth={lineWidth}>
+            <LineColor lineWidth={lineWidth} />
+          </LineContainer>
         );
       })}
     </>

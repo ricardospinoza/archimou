@@ -33,9 +33,6 @@ export const ProfilePictureInput = ({
 
       await storage().ref(`images/${fileName}`).putString(base64!, 'base64');
       const url = await storage().ref(`images/${fileName}`).getDownloadURL();
-
-      console.log({url});
-
       setImageSource({uri});
       onChangePhoto(url);
     } catch ({error}) {
