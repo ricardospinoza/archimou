@@ -1,7 +1,7 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Input, ProfilePictureInput} from '../../components';
+import {FullLoading, Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
 import {
   createUserNode,
@@ -20,6 +20,8 @@ export const Register = () => {
     user?.photoURL?.replaceAll('s96-c', 's192-c') ?? '',
   );
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigation = useNavigation();
 
   const handleSubmit = async () => {
@@ -30,18 +32,20 @@ export const Register = () => {
       photo,
       relations: [],
     };
-
-    const data = await getDynamicLinkData();
-
-    if (!!data?.tempId) {
-      await deleteTempNode(data.tempId);
+    try {
+      setIsLoading(true);
+      const data = await getDynamicLinkData();
+      if (!!data?.tempId) {
+        await deleteTempNode(data.tempId);
+      }
+      await createUserNode(node);
+      setIsLoading(false);
+      navigation.navigate('Home', {
+        node,
+      });
+    } catch (e) {
+      console.log('Error registring new user', e);
     }
-
-    await createUserNode(node);
-
-    navigation.navigate('Home', {
-      node,
-    });
   };
 
   return (
@@ -70,6 +74,7 @@ export const Register = () => {
       <Footer>
         <Continue label="Continuar" onPress={handleSubmit} />
       </Footer>
+      <FullLoading show={isLoading} />
     </>
   );
 };

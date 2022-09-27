@@ -1,7 +1,7 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {Input, ProfilePictureInput} from '../../components';
+import {FullLoading, Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
 import {Container, Continue, Footer, Form} from './styles';
 import {StackActions} from '@react-navigation/native';
@@ -16,6 +16,8 @@ export const FamiliarRegister = () => {
   const [birthDate, setBirthDate] = useState('');
   const [photo, setPhoto] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigation = useNavigation();
 
   const handleSubmitNewFamiliar = async () => {
@@ -29,13 +31,18 @@ export const FamiliarRegister = () => {
       relations: [],
     } as PersonNode;
 
-    await createFamiliar(newFamiliarNode);
-    await addFamiliarToNode(node, {
-      id: tempId,
-      type: relationType,
-    });
-
-    navigation.dispatch(StackActions.pop(2));
+    try {
+      setIsLoading(true);
+      await createFamiliar(newFamiliarNode);
+      await addFamiliarToNode(node, {
+        id: tempId,
+        type: relationType,
+      });
+      setIsLoading(false);
+      navigation.dispatch(StackActions.pop(2));
+    } catch (e) {
+      console.log('Failed to add new Familiar', e);
+    }
   };
 
   return (
@@ -64,6 +71,7 @@ export const FamiliarRegister = () => {
       <Footer>
         <Continue label="Continuar" onPress={handleSubmitNewFamiliar} />
       </Footer>
+      <FullLoading show={isLoading} />
     </>
   );
 };

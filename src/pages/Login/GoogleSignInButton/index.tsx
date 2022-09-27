@@ -8,14 +8,21 @@ import {
 } from './styles';
 import auth from '@react-native-firebase/auth';
 interface GoogleSignInButtonProps {
-  // onSignIn: () => void;
+  onLoading: (loading: boolean) => void;
 }
 
-export const GoogleSignInButton = ({}: GoogleSignInButtonProps) => {
+export const GoogleSignInButton = ({onLoading}: GoogleSignInButtonProps) => {
   async function onGoogleButtonPress() {
-    const {idToken} = await GoogleSignin.signIn();
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    auth().signInWithCredential(googleCredential);
+    try {
+      onLoading(true);
+      const {idToken} = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      auth().signInWithCredential(googleCredential);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      onLoading(false);
+    }
   }
 
   return (
