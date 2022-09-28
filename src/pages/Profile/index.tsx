@@ -18,12 +18,19 @@ import {
 } from './styles';
 import Clipboard from '@react-native-community/clipboard';
 import {Alert} from 'react-native';
+import {useUser} from '../../hooks';
+import {getUserNode, removeNodeRelation} from '../../service';
+import {useDispatch} from 'react-redux';
+import {saveUser} from '../../store/slices';
 
 export const Profile = () => {
   const {params} = useRoute();
-  const authUserId = params?.authUserId as PersonNode;
+
+  const dispatch = useDispatch();
+
   const node = params?.node as PersonNode;
-  const itsMe = params?.itsMe as boolean;
+  const user = useUser();
+  const itsMe = node.id === user.id;
 
   const navigation = useNavigation();
 
@@ -34,7 +41,7 @@ export const Profile = () => {
 
   const buildLink = async () => {
     const link = await dynamicLinks().buildLink({
-      link: `https://archimou.com?tempId=${node.id}&userInviteId=${authUserId}`,
+      link: `https://archimou.com?tempId=${node.id}&userInviteId=${user.id}`,
       domainUriPrefix: 'https://archimou.page.link/',
       android: {
         packageName: 'com.archimou',
@@ -43,6 +50,18 @@ export const Profile = () => {
     Clipboard.setString(link);
     console.log({link});
     Alert.alert('Link do convite enviado para area de transferencia', link);
+  };
+
+  const removeRelation = async () => {
+    try {
+      await removeNodeRelation(user, node);
+      const updatedUser = await getUserNode(user.id);
+      dispatch(saveUser(updatedUser));
+    } catch (e) {
+      console.log('Error removing relation', e);
+    } finally {
+      navigation.dispatch(StackActions.pop());
+    }
   };
 
   return (
@@ -64,7 +83,7 @@ export const Profile = () => {
           {itsMe ? (
             <Remove label="Deslogar" onPress={handleSignOut} />
           ) : (
-            <Remove label="Remover da árvore" onPress={() => {}} />
+            <Remove label="Remover da árvore" onPress={removeRelation} />
           )}
         </Footer>
       </Container>

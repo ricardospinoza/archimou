@@ -10,9 +10,11 @@ export const useTree = () => {
   const [lines, setLines] = useState<Line[]>([]);
 
   const setMainNode = async (mainNode: PersonNode) => {
+    console.log('CENTRALIZOU E CHAMOU');
     setNodes([mainNode]);
     setLines([]);
     const distributedNodes = await tree.putFamiliarNodesByFocusedNode(mainNode);
+    console.log({mainNode, distributedNodes});
     setNodes(() => {
       const newLines = buildLinesFrom(mainNode, distributedNodes);
       setLines(newLines);

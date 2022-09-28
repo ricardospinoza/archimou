@@ -6,7 +6,6 @@ import {FullLoading} from '../../components';
 import {useState} from 'react';
 
 export const Login = () => {
-  const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
 
   return (

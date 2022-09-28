@@ -7,10 +7,9 @@ import {Icon} from '../Icon';
 import {Container, Base} from './styles';
 interface NodeOptionsProps {
   nodePressed: PersonNode | null;
-  userId: string;
 }
 
-export const NodeOptions = ({nodePressed, userId}: NodeOptionsProps) => {
+export const NodeOptions = ({nodePressed}: NodeOptionsProps) => {
   const navigation = useNavigation();
 
   const goToAddNewFamiliar = () => {
@@ -22,8 +21,6 @@ export const NodeOptions = ({nodePressed, userId}: NodeOptionsProps) => {
   const goToProfile = () => {
     navigation.navigate('Profile', {
       node: nodePressed,
-      itsMe: userId === nodePressed?.id,
-      authUserId: userId,
     }); //FIXME: types
   };
 

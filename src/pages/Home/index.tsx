@@ -5,14 +5,11 @@ import {
   InteractiveViewHandler,
 } from '../../components/InteractiveView';
 import {HALF_SIZE, NODE_CENTER, SIZE} from '../../constants';
-import {useTree} from '../../hooks';
+import {useTree, useUser} from '../../hooks';
 import {Position} from '../../types';
 import {FamiliarTypes, PersonNode} from '../../models/TreeViewModel';
-import {useIsFocused, useRoute} from '@react-navigation/native';
-import {useNode} from './useNode';
-import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {useIsFocused} from '@react-navigation/native';
 
-import parse from 'url-parse';
 import {
   addFamiliarToNode,
   deleteTempNode,
@@ -31,7 +28,7 @@ export const Home = () => {
   const [userInvitation, setUserInvitation] = useState<PersonNode | null>(null);
   const [tempId, setTempId] = useState('');
 
-  const node = useNode();
+  const user = useUser();
 
   const screenCenter = {
     x: HALF_SIZE + NODE_CENTER.x,
@@ -41,8 +38,9 @@ export const Home = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    console.log('INITIALIZE');
     initialize();
-  }, [isFocused, node]);
+  }, [isFocused, user]);
 
   const initialize = async () => {
     if (isFocused) {
@@ -73,7 +71,7 @@ export const Home = () => {
   const centerMainNode = () => {
     centralizeView(screenCenter);
     setMainNode({
-      ...node,
+      ...user,
       position: {...screenCenter},
     } as PersonNode);
   };
@@ -101,14 +99,14 @@ export const Home = () => {
       Partner: 'Partner',
     } as {[key: FamiliarTypes]: FamiliarTypes};
 
-    await addFamiliarToNode(node, {
+    await addFamiliarToNode(user, {
       id: userInvitation!.id,
       type: mapRelations[relation!.type],
     });
 
     await replaceFamiliarNode(userInvitation!, {
       tempId,
-      realId: node.id,
+      realId: user.id,
     });
 
     setShowInviteModal(false);
@@ -138,7 +136,7 @@ export const Home = () => {
           onNodePress={handleNodeClick}
         />
 
-        <NodeOptions nodePressed={pressedNode} userId={node.id} />
+        <NodeOptions nodePressed={pressedNode} />
       </InteractiveView>
       <Dock onTreePress={centerMainNode} />
     </>

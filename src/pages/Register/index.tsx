@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {FullLoading, Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
+import {useUser} from '../../hooks';
 import {
   createUserNode,
   deleteTempNode,
@@ -10,9 +11,7 @@ import {
 } from '../../service';
 import {Container, Continue, Footer, Form} from './styles';
 export const Register = () => {
-  const {
-    params: {user},
-  } = useRoute();
+  const user = useUser();
 
   const [name, setName] = useState(user.displayName);
   const [birthDate, setDate] = useState('');

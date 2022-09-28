@@ -4,9 +4,13 @@ import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import backgroundImage from '../../assets/background.png';
 import {Background} from './styles';
 import {getDynamicLinkData, getUserNode} from '../../service';
+import {useDispatch} from 'react-redux';
+import {saveUser} from '../../store/slices';
 
 export const Splash = () => {
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);
@@ -30,14 +34,12 @@ export const Splash = () => {
     } else {
       const userNode = await getUserNode(user.uid);
 
+      dispatch(saveUser(userNode));
+
       if (!userNode) {
-        navigation.navigate('Register', {
-          user,
-        });
+        navigation.navigate('Register');
       } else {
-        navigation.navigate('Home', {
-          node: userNode,
-        });
+        navigation.navigate('Home');
       }
     }
   };

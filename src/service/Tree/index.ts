@@ -90,3 +90,23 @@ export const deleteTempNode = async (tempId: string) => {
     await firestore().collection('People').doc(tempId).delete();
   } catch (e) {}
 };
+
+export const removeNodeRelation = async (
+  user: PersonNode,
+  node: PersonNode,
+) => {
+  try {
+    const userRelations = user.relations.filter(({id}) => id !== node.id);
+    const nodeRelations = user.relations.filter(({id}) => id !== user.id);
+
+    await firestore().collection('People').doc(user.id).update({
+      relations: userRelations,
+    });
+
+    await firestore().collection('People').doc(node.id).update({
+      relations: nodeRelations,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
