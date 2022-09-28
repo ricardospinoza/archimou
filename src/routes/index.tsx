@@ -6,8 +6,10 @@ import {
   Login,
   Register,
   Splash,
+  Search,
 } from '../pages';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {SearchHeader} from '../components';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +38,12 @@ export const Router = () => {
       <Stack.Screen
         name="Home"
         component={Home}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="Search"
+        component={Search}
         options={{headerShown: false}}
       />
 

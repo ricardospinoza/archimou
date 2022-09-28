@@ -10,3 +10,4 @@ export {ProfilePictureInput} from './ProfilePictureInput';
 export {Input} from './Input';
 export {InvitationModal} from './InvitationModal';
 export {FullLoading} from './FullLoading';
+export {SearchHeader} from './SearchHeader';

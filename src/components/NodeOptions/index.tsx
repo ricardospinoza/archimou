@@ -1,6 +1,4 @@
 import {useNavigation} from '@react-navigation/native';
-import {Pressable, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {NODE_SIZE} from '../../constants';
 import {PersonNode} from '../../models/TreeViewModel';
 import {Icon} from '../Icon';
@@ -13,10 +11,14 @@ export const NodeOptions = ({nodePressed}: NodeOptionsProps) => {
   const navigation = useNavigation();
 
   const goToAddNewFamiliar = () => {
-    navigation.navigate('AddFamiliar', {
+    navigation.navigate('Search', {
       //FIXME: types
       node: nodePressed,
     });
+    // navigation.navigate('AddFamiliar', {
+    //   //FIXME: types
+    //   node: nodePressed,
+    // });
   };
   const goToProfile = () => {
     navigation.navigate('Profile', {

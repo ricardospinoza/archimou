@@ -5,3 +5,4 @@ export {FamiliarRegister} from './FamiliarRegister';
 export {Login} from './Login';
 export {Register} from './Register';
 export {Splash} from './Splash';
+export {Search} from './Search';

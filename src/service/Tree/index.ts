@@ -110,3 +110,41 @@ export const removeNodeRelation = async (
     console.log(e);
   }
 };
+
+export const getUsersByName = async (name: string) => {
+  try {
+    const response = await firestore()
+      .collection('People')
+      .where('name', '>=', name)
+      .where('name', '<=', name + '\uf8ff')
+      .get();
+
+    const users = [] as PersonNode[];
+
+    response.forEach(userRaw => {
+      const user = userRaw.data() as PersonNode;
+      users.push(user);
+    });
+
+    return users;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getParentsByNode = async (node: PersonNode) => {
+  try {
+    const parents = node.relations.filter(({type}) => type === 'Parent');
+
+    const parentNames = await Promise.all(
+      parents.map(async ({id}) => {
+        const node = await firestore().collection('People').doc(id).get();
+        return (node.data() as PersonNode)['name'];
+      }),
+    );
+
+    return parentNames;
+  } catch (e) {
+    console.log(e);
+  }
+};
