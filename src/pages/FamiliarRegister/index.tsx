@@ -6,7 +6,10 @@ import {DATE_MASK} from '../../constants';
 import {Container, Continue, Footer, Form} from './styles';
 import {StackActions} from '@react-navigation/native';
 import {PersonNode} from '../../models/TreeViewModel';
-import {addFamiliarToNode, createFamiliar} from '../../service';
+import {addFamiliarToNode, createFamiliar, getUserNode} from '../../service';
+import {saveUser} from '../../store/slices';
+import {useDispatch} from 'react-redux';
+import {useUser} from '../../hooks';
 export const FamiliarRegister = () => {
   const {
     params: {node, relationType},
@@ -19,6 +22,9 @@ export const FamiliarRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+  const user = useUser();
 
   const handleSubmitNewFamiliar = async () => {
     const tempId = `${node.id}_${relationType}_${name.trim()}`;
@@ -39,6 +45,8 @@ export const FamiliarRegister = () => {
         type: relationType,
       });
       setIsLoading(false);
+      const updatedUser = await getUserNode(user.id);
+      dispatch(saveUser(updatedUser));
       navigation.dispatch(StackActions.pop(2));
     } catch (e) {
       console.log('Failed to add new Familiar', e);
