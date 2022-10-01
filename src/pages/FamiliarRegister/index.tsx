@@ -47,7 +47,7 @@ export const FamiliarRegister = () => {
       setIsLoading(false);
       const updatedUser = await getUserNode(user.id);
       dispatch(saveUser(updatedUser));
-      navigation.dispatch(StackActions.pop(2));
+      navigation.dispatch(StackActions.pop(3));
     } catch (e) {
       console.log('Failed to add new Familiar', e);
     }

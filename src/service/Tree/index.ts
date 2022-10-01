@@ -148,3 +148,48 @@ export const getParentsByNode = async (node: PersonNode) => {
     console.log(e);
   }
 };
+
+export const createInvitation = async (
+  invitedNodeId: string,
+  invitationNodeId: string,
+) => {
+  try {
+    const invitesCollection = firestore().collection('Invites');
+    const invitesRaw = await invitesCollection.doc(invitedNodeId).get();
+
+    const invites = (invitesRaw.data()?.invitations as Array<string>) ?? [];
+
+    await firestore()
+      .collection('Invites')
+      .doc(invitedNodeId)
+      .set({
+        invitations: [...invites, invitationNodeId],
+      });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const listenInvitations = (
+  userId: string,
+  callback: (invitaions: string[]) => void,
+) => {
+  firestore()
+    .collection('Invites')
+    .doc(userId)
+    .onSnapshot(data => {
+      const invitaions = data.data()?.invitations ?? [];
+      callback(invitaions);
+    });
+};
+
+export const updateUserInvitations = async (
+  userId: string,
+  invitations: string[],
+) => {
+  try {
+    await firestore().collection('Invites').doc(userId).update({invitations});
+  } catch (e) {
+    console.log(e);
+  }
+};

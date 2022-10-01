@@ -1,8 +1,8 @@
 // import React from 'react';
 import React, {useEffect, useState} from 'react';
-import {FlatList, SectionList, Text, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {SectionList} from 'react-native';
 import {SearchHeader} from '../../components';
+import {useUser} from '../../hooks';
 import {PersonNode} from '../../models/TreeViewModel';
 import {getParentsByNode, getUsersByName} from '../../service';
 import {NodeTile} from './NodeTile';
@@ -11,6 +11,7 @@ import {Container} from './styles';
 import {UserNotFound} from './UserNotFound';
 
 export const Search = () => {
+  const user = useUser();
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<
     (PersonNode & {parentsNames?: string[]})[]
@@ -48,11 +49,18 @@ export const Search = () => {
           sections={[
             {
               title: 'Users',
-              data: users,
+              data: users.filter(({id}) => user.id !== id),
             },
           ]}
           renderItem={({item}) => {
-            return <NodeTile name={item.name} parents={item.parentsNames} />;
+            return (
+              <NodeTile
+                id={item.id}
+                user={user}
+                name={item.name}
+                parents={item.parentsNames}
+              />
+            );
           }}
           ListFooterComponent={UserNotFound}
         />

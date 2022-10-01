@@ -1,6 +1,7 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
+import {useDispatch} from 'react-redux';
 import {FullLoading, Input, ProfilePictureInput} from '../../components';
 import {DATE_MASK} from '../../constants';
 import {useUser} from '../../hooks';
@@ -9,9 +10,11 @@ import {
   deleteTempNode,
   getDynamicLinkData,
 } from '../../service';
+import {saveUser} from '../../store/slices';
 import {Container, Continue, Footer, Form} from './styles';
 export const Register = () => {
-  const user = useUser();
+  const {params} = useRoute();
+  const user = params?.user;
 
   const [name, setName] = useState(user.displayName);
   const [birthDate, setDate] = useState('');
@@ -22,6 +25,7 @@ export const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     const node = {
@@ -39,9 +43,8 @@ export const Register = () => {
       }
       await createUserNode(node);
       setIsLoading(false);
-      navigation.navigate('Home', {
-        node,
-      });
+      dispatch(saveUser(node));
+      navigation.navigate('Home');
     } catch (e) {
       console.log('Error registring new user', e);
     }

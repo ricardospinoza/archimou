@@ -34,11 +34,12 @@ export const Splash = () => {
     } else {
       const userNode = await getUserNode(user.uid);
 
-      dispatch(saveUser(userNode));
-
       if (!userNode) {
-        navigation.navigate('Register');
+        navigation.navigate('Register', {
+          user,
+        });
       } else {
+        dispatch(saveUser(userNode));
         navigation.navigate('Home');
       }
     }

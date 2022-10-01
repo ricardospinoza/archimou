@@ -11,7 +11,7 @@ export const Container = styled.View`
 `;
 
 export const Card = styled.View`
-  height: 40%;
+  height: 50%;
   width: 70%;
   background-color: #ffffff;
   border: 1px solid #8c59b5;

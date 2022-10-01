@@ -15,7 +15,9 @@ import {
   deleteTempNode,
   getDynamicLinkData,
   getUserNode,
+  listenInvitations,
   replaceFamiliarNode,
+  updateUserInvitations,
 } from '../../service';
 
 export const Home = () => {
@@ -38,7 +40,6 @@ export const Home = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log('INITIALIZE');
     initialize();
   }, [isFocused, user]);
 
@@ -53,17 +54,29 @@ export const Home = () => {
     fetchInvitationLink();
   }, []);
 
+  useEffect(() => {
+    listenInvitations(user.id, async invitations => {
+      if (!!invitations.length) {
+        setTempId(user.id);
+        await setInvite(invitations.shift());
+        await updateUserInvitations(user.id, invitations);
+      }
+    });
+  }, []);
+
   const fetchInvitationLink = async () => {
     const data = await getDynamicLinkData();
     if (!data) return;
 
     await deleteTempNode(data!.tempId);
 
-    const userInvitation = await getUserNode(data!.userInviteId);
-
-    console.log({data});
-
     setTempId(data!.tempId);
+    setInvite(data!.userInviteId);
+  };
+
+  const setInvite = async (userInviteId: string) => {
+    const userInvitation = await getUserNode(userInviteId);
+
     setUserInvitation(userInvitation!);
     setShowInviteModal(true);
   };
@@ -104,11 +117,12 @@ export const Home = () => {
       type: mapRelations[relation!.type],
     });
 
-    await replaceFamiliarNode(userInvitation!, {
-      tempId,
-      realId: user.id,
-    });
-
+    if (tempId !== user.id) {
+      await replaceFamiliarNode(userInvitation!, {
+        tempId,
+        realId: user.id,
+      });
+    }
     setShowInviteModal(false);
     centerMainNode();
   };
