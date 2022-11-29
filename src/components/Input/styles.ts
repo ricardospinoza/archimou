@@ -16,4 +16,5 @@ export const InputContainer = styled.View`
 export const TextInput = styled(MaskInput)`
   color: #8c59b5;
   font-size: 20px;
+  flex:1;
 `;
