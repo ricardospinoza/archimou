@@ -1,9 +1,9 @@
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {useEffect, useState} from 'react';
+import { useNavigation} from '@react-navigation/native';
+import {useEffect } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import backgroundImage from '../../assets/background.png';
 import {Background} from './styles';
-import {getDynamicLinkData, getUserNode} from '../../service';
+import { getUserNode} from '../../service';
 import {useDispatch} from 'react-redux';
 import {saveUser} from '../../store/slices';
 

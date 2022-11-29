@@ -1,19 +1,21 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useDispatch} from 'react-redux';
-import {FullLoading, Input, ProfilePictureInput} from '../../components';
-import {DATE_MASK} from '../../constants';
-import {useUser} from '../../hooks';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useState } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+import { FullLoading, Input, ProfilePictureInput } from '../../components';
+import { DATE_MASK } from '../../constants';
+import { useUser } from '../../hooks';
 import {
   createUserNode,
   deleteTempNode,
   getDynamicLinkData,
 } from '../../service';
-import {saveUser} from '../../store/slices';
-import {Container, Continue, Footer, Form} from './styles';
+import { saveUser } from '../../store/slices';
+import { Container, Continue, Footer, Form } from './styles';
+import Toast from 'react-native-toast-message'
+
 export const Register = () => {
-  const {params} = useRoute();
+  const { params } = useRoute();
   const user = params?.user;
 
   const [name, setName] = useState(user.displayName);
@@ -28,6 +30,24 @@ export const Register = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
+
+
+    if (name === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Por favor informe seu nome'
+      })
+      return
+    }
+
+    if (birthDate === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Por favor informe sua data de nascimento'
+      })
+      return
+    }
+
     const node = {
       id: user.uid,
       name,
