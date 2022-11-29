@@ -47,6 +47,20 @@ export const Register = () => {
       })
       return
     }
+    const [day, month, year] = birthDate.split('/').map(Number);
+
+    const invalidDay = day > 31;
+    const invalidMonth = month > 12;
+    const invalidYear = year > (new Date()).getFullYear();
+
+    const noExistentDate = invalidDay || invalidMonth || invalidYear;
+
+    if (noExistentDate) {
+      Toast.show({
+        type: 'error',
+        text1: 'Data inválida'
+      })
+    }
 
     const node = {
       id: user.uid,
