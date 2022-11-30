@@ -13,6 +13,7 @@ import {
 import { saveUser } from '../../store/slices';
 import { Container, Continue, Footer, Form } from './styles';
 import Toast from 'react-native-toast-message'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export const Register = () => {
   const { params } = useRoute();
@@ -85,7 +86,7 @@ export const Register = () => {
   };
 
   return (
-    <>
+    <KeyboardAwareScrollView>
       <ScrollView>
         <Container>
           <ProfilePictureInput photoUrl={photo} onChangePhoto={setPhoto} />
@@ -111,6 +112,6 @@ export const Register = () => {
         <Continue label="Continuar" onPress={handleSubmit} />
       </Footer>
       <FullLoading show={isLoading} />
-    </>
+    </KeyboardAwareScrollView>
   );
 };
