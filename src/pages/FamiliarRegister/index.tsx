@@ -1,18 +1,21 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {FullLoading, Input, ProfilePictureInput} from '../../components';
-import {DATE_MASK} from '../../constants';
-import {Container, Continue, Footer, Form} from './styles';
-import {StackActions} from '@react-navigation/native';
-import {PersonNode} from '../../models/TreeViewModel';
-import {addFamiliarToNode, createFamiliar, getUserNode} from '../../service';
-import {saveUser} from '../../store/slices';
-import {useDispatch} from 'react-redux';
-import {useUser} from '../../hooks';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useState } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
+import { FullLoading, Input, ProfilePictureInput } from '../../components';
+import { DATE_MASK } from '../../constants';
+import { Container, Continue, Footer, Form } from './styles';
+import { StackActions } from '@react-navigation/native';
+import { PersonNode } from '../../models/TreeViewModel';
+import { addFamiliarToNode, createFamiliar, getUserNode } from '../../service';
+import { saveUser } from '../../store/slices';
+import { useDispatch } from 'react-redux';
+import { useUser } from '../../hooks';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Toast from 'react-native-toast-message'
+
 export const FamiliarRegister = () => {
   const {
-    params: {node, relationType},
+    params: { node, relationType },
   } = useRoute();
 
   const [name, setName] = useState('');
@@ -28,7 +31,35 @@ export const FamiliarRegister = () => {
 
   const handleSubmitNewFamiliar = async () => {
     const tempId = `${node.id}_${relationType}_${name.trim()}`;
+    if (name === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Por favor informe seu nome'
+      })
+      return
+    }
 
+    if (birthDate === '') {
+      Toast.show({
+        type: 'error',
+        text1: 'Por favor informe sua data de nascimento'
+      })
+      return
+    }
+    const [day, month, year] = birthDate.split('/').map(Number);
+
+    const invalidDay = day > 31;
+    const invalidMonth = month > 12;
+    const invalidYear = year > (new Date()).getFullYear();
+
+    const noExistentDate = invalidDay || invalidMonth || invalidYear;
+
+    if (noExistentDate) {
+      Toast.show({
+        type: 'error',
+        text1: 'Data inválida'
+      })
+    }
     const newFamiliarNode = {
       id: tempId,
       name,
@@ -54,7 +85,7 @@ export const FamiliarRegister = () => {
   };
 
   return (
-    <>
+    <KeyboardAwareScrollView>
       <ScrollView>
         <Container>
           <ProfilePictureInput photoUrl={photo} onChangePhoto={setPhoto} />
@@ -80,6 +111,6 @@ export const FamiliarRegister = () => {
         <Continue label="Continuar" onPress={handleSubmitNewFamiliar} />
       </Footer>
       <FullLoading show={isLoading} />
-    </>
+    </KeyboardAwareScrollView>
   );
 };
