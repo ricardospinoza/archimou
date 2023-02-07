@@ -1,15 +1,19 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {useState} from 'react';
 import {useUser} from '../../hooks';
 import {FamiliarTypes} from '../../models/TreeViewModel';
 import {Container, Options, Continue, Option} from './styles';
 
-export const AddFamiliar = () => {
+interface AddFamiliarProps {
+  route: any;
+}
+
+export const AddFamiliar = ({route}: AddFamiliarProps) => {
   const [relationType, setRelationType] = useState<FamiliarTypes>();
 
   const navigation = useNavigation();
 
-  const node = useUser();
+  const node = route.params?.node;
 
   const handleSelectFamiliarType = (familiarType: FamiliarTypes) => () => {
     setRelationType(familiarType);

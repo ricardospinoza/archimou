@@ -10,8 +10,15 @@ import {NoSearch} from './NoSearch';
 import {Container} from './styles';
 import {UserNotFound} from './UserNotFound';
 
-export const Search = () => {
+interface SearchProps {
+  route: any;
+}
+
+export const Search = ({route}: SearchProps) => {
   const user = useUser();
+
+  const node = route.params?.node;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [users, setUsers] = useState<
     (PersonNode & {parentsNames?: string[]})[]
@@ -43,7 +50,7 @@ export const Search = () => {
     <Container>
       <SearchHeader onChangeSearchTerm={setSearchTerm} />
       {!searchTerm ? (
-        <NoSearch />
+        <NoSearch node={node} />
       ) : (
         <SectionList
           sections={[

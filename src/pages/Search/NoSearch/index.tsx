@@ -4,11 +4,13 @@ import {Button, Container, Description} from './styles';
 import graph from '../../../assets/graph.png';
 import {useNavigation} from '@react-navigation/native';
 
-export const NoSearch = () => {
+export const NoSearch = ({node}) => {
   const navigation = useNavigation();
 
   const goToAddFamiliar = () => {
-    navigation.navigate('AddFamiliar');
+    navigation.navigate('AddFamiliar', {
+      node,
+    });
   };
 
   return (
