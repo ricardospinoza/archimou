@@ -6,7 +6,7 @@ const height = Dimensions.get('screen').height;
 
 export const Container = styled.View`
   flex: 1;
-  height: ${height};
+  height: ${height * 0.8};
   background-color: white;
   padding: 10px;
 `;
@@ -33,6 +33,7 @@ export const ProfilePicture = styled(ProfilePictureInput).attrs(() => ({
 
 export const Content = styled.View`
   flex: 1;
+  align-items: center;
 `;
 
 export const Description = styled.Text`

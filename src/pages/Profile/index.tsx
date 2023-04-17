@@ -35,6 +35,7 @@ export const Profile = () => {
   const navigation = useNavigation();
 
   const handleSignOut = async () => {
+    console.log('DESLOGOU');
     await auth().signOut();
     navigation.dispatch(StackActions.popToTop());
   };
@@ -65,7 +66,7 @@ export const Profile = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <Container>
         <Header>
           <ProfilePicture photoUrl={node.photo} />
@@ -81,7 +82,7 @@ export const Profile = () => {
         </Content>
         <Footer>
           {itsMe ? (
-            <Remove label="Deslogar" onPress={handleSignOut} />
+            <Remove label="Sair" onPress={handleSignOut} />
           ) : (
             <Remove label="Remover da árvore" onPress={removeRelation} />
           )}

@@ -1,9 +1,9 @@
-import { useNavigation} from '@react-navigation/native';
-import {useEffect } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {useEffect} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import backgroundImage from '../../assets/background.png';
 import {Background} from './styles';
-import { getUserNode} from '../../service';
+import {getUserNode} from '../../service';
 import {useDispatch} from 'react-redux';
 import {saveUser} from '../../store/slices';
 
@@ -15,6 +15,7 @@ export const Splash = () => {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);
     return () => {
+      console.log('SAIU');
       subscriber();
     };
   }, []);

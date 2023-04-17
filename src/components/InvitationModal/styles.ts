@@ -26,6 +26,7 @@ export const InviteText = styled.Text`
   padding: 10px 0;
   font-size: 20px;
   text-align: center;
+  color: #000000;
 `;
 
 export const Button = styled(BaseButton).attrs(() => ({
