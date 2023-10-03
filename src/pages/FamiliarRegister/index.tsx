@@ -98,12 +98,10 @@ export const FamiliarRegister = () => {
   }
 
   async function saveRelationWithParent() {
-    const tempId = `${node.id}_${relationType}_${name.trim()}`;
     const uuidV1 = uuid.v1().toString();
 
     const newFamiliarNode = {
-      id: tempId,
-      relationId: uuidV1,
+      id: uuidV1,
       name,
       birthDate,
       photo,
@@ -112,8 +110,7 @@ export const FamiliarRegister = () => {
     
     await createFamiliar(newFamiliarNode);
     await addFamiliarToNode(node, {
-      id: tempId,
-      relationId: uuidV1,
+      id: uuidV1,
       type: relationType,
     });
   }
@@ -122,7 +119,6 @@ export const FamiliarRegister = () => {
 
     return {
       id,
-      relationId,
       type: setRelationType(relationFromFamiliar)
     }
 
