@@ -5,12 +5,13 @@ import { FullLoading, Input, ProfilePictureInput } from '../../components';
 import { DATE_MASK } from '../../constants';
 import { Container, Continue, Footer, Form } from './styles';
 import { StackActions } from '@react-navigation/native';
-import { PersonNode } from '../../models/TreeViewModel';
+import { FamiliarTypes, PersonNode, Relation } from '../../models/TreeViewModel';
 import { addFamiliarToNode, createFamiliar, getUserNode } from '../../service';
 import { saveUser } from '../../store/slices';
 import { useDispatch } from 'react-redux';
 import { useUser } from '../../hooks';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import uuid from 'react-native-uuid';
 import Toast from 'react-native-toast-message'
 
 export const FamiliarRegister = () => {
@@ -30,13 +31,32 @@ export const FamiliarRegister = () => {
   const user = useUser();
 
   const handleSubmitNewFamiliar = async () => {
-    const tempId = `${node.id}_${relationType}_${name.trim()}`;
+    try {
+      setIsLoading(true);
+
+      validateDataNewFamiliar();
+
+      await saveRelationWithParent();
+      
+      const updatedUser = await getUserNode(user.id);
+      dispatch(saveUser(updatedUser));
+      navigation.dispatch(StackActions.pop(3));
+
+    } catch(e) {
+      console.log('Failed to add new Familiar', e);
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  function validateDataNewFamiliar() {
     if (name === '') {
       Toast.show({
         type: 'error',
         text1: 'Por favor informe seu nome'
       })
-      return
+      throw new Error("Nome é obrigatório");
     }
 
     if (birthDate === '') {
@@ -44,8 +64,13 @@ export const FamiliarRegister = () => {
         type: 'error',
         text1: 'Por favor informe sua data de nascimento'
       })
-      return
+      throw new Error("Data de nascimento é obrigatória");
     }
+
+    validateDate();
+  }
+
+  function validateDate() {
     const [day, month, year] = birthDate.split('/').map(Number);
 
     const invalidDay = day > 31;
@@ -54,35 +79,72 @@ export const FamiliarRegister = () => {
 
     const noExistentDate = invalidDay || invalidMonth || invalidYear;
 
+    /**
+     * TODO:
+     * 1) Validar data minima e máxima
+     * 2) Validar data atual
+     * 3) Validar data por geração, por exemplo, o pai não pode ter nascido depois do filho
+     * 4) Verificar outra possíveis validações
+     * 
+     */
     if (noExistentDate) {
       Toast.show({
         type: 'error',
         text1: 'Data inválida'
       })
+
+      throw new Error(`Data inválida: ${invalidDay ? "dia inválido" : invalidMonth ? "mes invalido" : "ano invalido"}`);
     }
+  }
+
+  async function saveRelationWithParent() {
+    const tempId = `${node.id}_${relationType}_${name.trim()}`;
+    const uuidV1 = uuid.v1().toString();
+
     const newFamiliarNode = {
       id: tempId,
+      relationId: uuidV1,
       name,
       birthDate,
       photo,
-      relations: [],
+      relations: [setRelation(node.id, uuidV1, relationType)],
     } as PersonNode;
+    
+    await createFamiliar(newFamiliarNode);
+    await addFamiliarToNode(node, {
+      id: tempId,
+      relationId: uuidV1,
+      type: relationType,
+    });
+  }
 
-    try {
-      setIsLoading(true);
-      await createFamiliar(newFamiliarNode);
-      await addFamiliarToNode(node, {
-        id: tempId,
-        type: relationType,
-      });
-      setIsLoading(false);
-      const updatedUser = await getUserNode(user.id);
-      dispatch(saveUser(updatedUser));
-      navigation.dispatch(StackActions.pop(3));
-    } catch (e) {
-      console.log('Failed to add new Familiar', e);
+  function setRelation(id: string, relationId: string, relationFromFamiliar: FamiliarTypes): Relation {
+
+    return {
+      id,
+      relationId,
+      type: setRelationType(relationFromFamiliar)
     }
-  };
+
+  }
+
+  /**
+   * The method set the familiar relation with the user.
+   * 
+   * If the user is creating a parent, the user will be parent's children
+   */
+  function setRelationType(relationFromFamiliar: FamiliarTypes): FamiliarTypes {
+
+    switch (relationFromFamiliar) {
+      case 'Parent':
+        return 'Children';
+      case 'Children':
+        return 'Parent';
+      default:
+        return relationFromFamiliar;
+    }
+      
+  }
 
   return (
     <KeyboardAwareScrollView>
