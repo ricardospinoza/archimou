@@ -82,7 +82,6 @@ export const Home = () => {
   };
 
   const centerMainNode = () => {
-    console.log('CENTER MAIN NODE');
     centralizeView(screenCenter);
     setMainNode({
       ...user,

@@ -36,7 +36,7 @@ export const ProfilePictureInput = ({
       setImageSource({uri});
       onChangePhoto(url);
     } catch ({error}) {
-      console.log({error});
+      console.error({error});
     }
   };
 

@@ -14,14 +14,14 @@ export const getUserTree = async (relations: Relation[]) => {
 export const getUserNode = async (nodeId: string) => {
   try {
     const userNode = await firestore().collection('People').doc(nodeId).get();
-
+    
     if (!userNode.exists) {
       return;
     }
 
     return userNode.data();
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return undefined;
   }
 };
@@ -30,7 +30,7 @@ export const createUserNode = async (node: PersonNode) => {
   try {
     await firestore().collection('People').doc(node.id).set(node);
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -38,7 +38,7 @@ export const createFamiliar = async (node: PersonNode) => {
   try {
     await firestore().collection('People').doc(node.id).set(node);
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -54,7 +54,7 @@ export const addFamiliarToNode = async (
         relations: [...node.relations, newRelation],
       });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -81,7 +81,7 @@ export const replaceFamiliarNode = async (
       relations,
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -107,7 +107,7 @@ export const removeNodeRelation = async (
       relations: nodeRelations,
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -128,7 +128,7 @@ export const getUsersByName = async (name: string) => {
 
     return users;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -145,7 +145,7 @@ export const getParentsByNode = async (node: PersonNode) => {
 
     return parentNames;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -166,7 +166,7 @@ export const createInvitation = async (
         invitations: [...invites, invitationNodeId],
       });
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
@@ -190,6 +190,6 @@ export const updateUserInvitations = async (
   try {
     await firestore().collection('Invites').doc(userId).update({invitations});
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };

@@ -35,7 +35,6 @@ export const Profile = () => {
   const navigation = useNavigation();
 
   const handleSignOut = async () => {
-    console.log('DESLOGOU');
     await auth().signOut();
     navigation.dispatch(StackActions.popToTop());
   };
@@ -49,7 +48,6 @@ export const Profile = () => {
       },
     });
     Clipboard.setString(link);
-    console.log({link});
     Alert.alert('Link do convite enviado para area de transferencia', link);
   };
 
@@ -59,7 +57,7 @@ export const Profile = () => {
       const updatedUser = await getUserNode(user.id);
       dispatch(saveUser(updatedUser));
     } catch (e) {
-      console.log('Error removing relation', e);
+      console.error('Error removing relation', e);
     } finally {
       navigation.dispatch(StackActions.pop());
     }

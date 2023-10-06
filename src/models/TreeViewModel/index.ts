@@ -7,7 +7,6 @@ export type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
 
 export interface PersonNode {
   id: string;
-  relationId: string;
   name: string;
   birthDate: string;
   photo: string;
@@ -18,7 +17,6 @@ export interface PersonNode {
 
 export interface Relation {
   id: string;
-  relationId: string;
   type: FamiliarTypes;
 }
 
@@ -28,19 +26,15 @@ export class TreeViewModel {
   #distribute = new DistributeService();
 
   #addPositionsToFamiliars() {
-    console.log(">>>>>>>> Parent")
     const parents = this.#getNodesByType('Parent');
     const parentsWithPosition = this.#distribute.parentsPositions(parents);
 
-    console.log(">>>>>>>> Children")
     const children = this.#getNodesByType('Children');
     const childrenWithPosition = this.#distribute.childrensPositions(children);
 
-    console.log(">>>>>>>> Sibling")
     const sibling = this.#getNodesByType('Sibling');
     const siblingWithPosition = this.#distribute.siblingsPositions(sibling);
 
-    console.log(">>>>>>>> Partner")
     const partners = this.#getNodesByType('Partner');
     const partnersWithPosition = this.#distribute.partnersPositions(partners);
 

@@ -43,7 +43,7 @@ export const FamiliarRegister = () => {
       navigation.dispatch(StackActions.pop(3));
 
     } catch(e) {
-      console.log('Failed to add new Familiar', e);
+      console.error('Failed to add new Familiar', e);
       return;
     } finally {
       setIsLoading(false);
