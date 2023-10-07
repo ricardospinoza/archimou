@@ -1,14 +1,10 @@
-import {useNavigation} from '@react-navigation/native';
-import {Image} from 'react-native';
-import {BaseButton} from '../../../components';
-import {Button, Container, Description} from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { Button, Container, Description } from './styles';
 
-export const UserNotFound = () => {
+export const UserNotFound = ({node}) => {
   const navigation = useNavigation();
 
-  const goToAddFamiliar = () => {
-    navigation.navigate('AddFamiliar');
-  };
+  const goToAddFamiliar = () => navigation.navigate('AddFamiliar', {node});
 
   return (
     <Container>
