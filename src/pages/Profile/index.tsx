@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {StackActions, useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
@@ -36,6 +37,7 @@ export const Profile = () => {
 
   const handleSignOut = async () => {
     await auth().signOut();
+    await GoogleSignin.signOut();
     navigation.dispatch(StackActions.popToTop());
   };
 
