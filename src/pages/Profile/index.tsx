@@ -39,6 +39,7 @@ export const Profile = () => {
     await auth().signOut();
     await GoogleSignin.signOut();
     navigation.dispatch(StackActions.popToTop());
+    navigation.navigate('Login');
   };
 
   const buildLink = async () => {
