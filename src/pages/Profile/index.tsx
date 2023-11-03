@@ -77,10 +77,13 @@ export const Profile = () => {
           </Info>
         </Header>
 
-        <Content>
-          <BaseButton label="Convidar para a rede" onPress={buildLink} />
-          {!!node.description && <Description>{node.description}</Description>}
-        </Content>
+        { !itsMe ?
+            <Content>
+              <BaseButton label="Convidar para a rede" onPress={buildLink} />
+              {!!node.description && <Description>{node.description}</Description>}
+            </Content>
+          : <Content />
+        }
         <Footer>
           {itsMe ? (
             <Remove label="Sair" onPress={handleSignOut} />
