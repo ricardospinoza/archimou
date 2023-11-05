@@ -21,3 +21,8 @@ export const DATE_MASK = [
   /\d/,
   /\d/,
 ];
+
+export const TABLE_NAMES = {
+  PEOPLE: 'People',
+  INVITES: 'Invites'
+}

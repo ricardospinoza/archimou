@@ -1,10 +1,10 @@
 import {PersonNode, Relation} from './../../models/TreeViewModel/index';
-import firestore from '@react-native-firebase/firestore';
+import { getIntancePeople, getIntanceInvite } from '../../utils/firebase-factory';
 
 export const getUserTree = async (relations: Relation[]) => {
   const nodeTree = await Promise.all(
     relations.map(async ({id}) => {
-      const node = await firestore().collection('People').doc(id).get();
+      const node = await getIntancePeople().doc(id).get();
       return node.data();
     }),
   );
@@ -13,7 +13,7 @@ export const getUserTree = async (relations: Relation[]) => {
 
 export const getUserNode = async (nodeId: string) => {
   try {
-    const userNode = await firestore().collection('People').doc(nodeId).get();
+    const userNode = await getIntancePeople().doc(nodeId).get();
     
     if (!userNode.exists) {
       return;
@@ -27,28 +27,27 @@ export const getUserNode = async (nodeId: string) => {
 };
 
 export const createUserNode = async (node: PersonNode) => {
-  try {
-    await firestore().collection('People').doc(node.id).set(node);
-  } catch (e) {
-    console.error(e);
-  }
+  await createPeople(node);
 };
 
 export const createFamiliar = async (node: PersonNode) => {
+  await createPeople(node);
+};
+
+const createPeople = async (node: PersonNode) => {
   try {
-    await firestore().collection('People').doc(node.id).set(node);
+    await getIntancePeople().doc(node.id).set(node);
   } catch (e) {
     console.error(e);
   }
-};
+}
 
 export const addFamiliarToNode = async (
   node: PersonNode,
   newRelation: Relation,
 ) => {
   try {
-    await firestore()
-      .collection('People')
+    await getIntancePeople()
       .doc(node.id)
       .update({
         relations: [...node.relations, newRelation],
@@ -77,7 +76,7 @@ export const replaceFamiliarNode = async (
       id: realId,
     };
 
-    await firestore().collection('People').doc(node.id).update({
+    await getIntancePeople().doc(node.id).update({
       relations,
     });
   } catch (e) {
@@ -87,7 +86,7 @@ export const replaceFamiliarNode = async (
 
 export const deleteTempNode = async (tempId: string) => {
   try {
-    await firestore().collection('People').doc(tempId).delete();
+    await getIntancePeople().doc(tempId).delete();
   } catch (e) {}
 };
 
@@ -99,11 +98,11 @@ export const removeNodeRelation = async (
     const userRelations = user.relations.filter(({id}) => id !== node.id);
     const nodeRelations = user.relations.filter(({id}) => id !== user.id);
 
-    await firestore().collection('People').doc(user.id).update({
+    await getIntancePeople().doc(user.id).update({
       relations: userRelations,
     });
 
-    await firestore().collection('People').doc(node.id).update({
+    await getIntancePeople().doc(node.id).update({
       relations: nodeRelations,
     });
   } catch (e) {
@@ -113,8 +112,7 @@ export const removeNodeRelation = async (
 
 export const getUsersByName = async (name: string) => {
   try {
-    const response = await firestore()
-      .collection('People')
+    const response = await getIntancePeople()
       .where('name', '>=', name)
       .where('name', '<=', name + '\uf8ff')
       .get();
@@ -138,7 +136,7 @@ export const getParentsByNode = async (node: PersonNode) => {
 
     const parentNames = await Promise.all(
       parents.map(async ({id}) => {
-        const node = await firestore().collection('People').doc(id).get();
+        const node = await getIntancePeople().doc(id).get();
         return (node.data() as PersonNode)['name'];
       }),
     );
@@ -148,19 +146,21 @@ export const getParentsByNode = async (node: PersonNode) => {
     console.error(e);
   }
 };
+// Não entendi a necessidade do invite
 
+/*
+ * Dúvidas em relação ao motivo de não ter notificação, e entrar direto na rede da outra pessoa
+ */
 export const createInvitation = async (
   invitedNodeId: string,
   invitationNodeId: string,
 ) => {
   try {
-    const invitesCollection = firestore().collection('Invites');
-    const invitesRaw = await invitesCollection.doc(invitedNodeId).get();
+    const invitesRaw = await getIntanceInvite().doc(invitedNodeId).get();
 
     const invites = (invitesRaw.data()?.invitations as Array<string>) ?? [];
 
-    await firestore()
-      .collection('Invites')
+    await getIntanceInvite()
       .doc(invitedNodeId)
       .set({
         invitations: [...invites, invitationNodeId],
@@ -174,8 +174,7 @@ export const listenInvitations = (
   userId: string,
   callback: (invitaions: string[]) => void,
 ) => {
-  firestore()
-    .collection('Invites')
+  getIntanceInvite()
     .doc(userId)
     .onSnapshot(data => {
       const invitaions = data.data()?.invitations ?? [];
@@ -188,7 +187,7 @@ export const updateUserInvitations = async (
   invitations: string[],
 ) => {
   try {
-    await firestore().collection('Invites').doc(userId).update({invitations});
+    await getIntanceInvite().doc(userId).update({invitations});
   } catch (e) {
     console.error(e);
   }
