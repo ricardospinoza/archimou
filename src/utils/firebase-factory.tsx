@@ -1,10 +1,14 @@
 import firestore from '@react-native-firebase/firestore';
 import { TABLE_NAMES } from '../constants';
 
-firestore().useEmulator("localhost", 8080);
-const db = firestore();
 
+let db: any = null;
 const getInstance = (tableName: string) => {
+
+    if (db == null) {
+        firestore().useEmulator("localhost", 8080);
+        db = firestore();
+    }
     return db.collection(tableName);   
 }
 

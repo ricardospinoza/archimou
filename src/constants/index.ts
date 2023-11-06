@@ -25,4 +25,8 @@ export const DATE_MASK = [
 export const TABLE_NAMES = {
   PEOPLE: 'People',
   INVITES: 'Invites'
-}
+};
+
+export const PAGE_NAMES = {
+  ADD_FAMILIAR: 'AddFamiliar'
+};

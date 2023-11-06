@@ -10,6 +10,9 @@ import {
   ConnectButton,
   InfoSection,
 } from './styles';
+import {useNavigation} from '@react-navigation/native';
+import { PAGE_NAMES } from '../../../constants';
+import { useParentType } from '../../../hooks/ParentType';
 
 interface NodeTileProps {
   id: string;
@@ -19,17 +22,47 @@ interface NodeTileProps {
 }
 
 export const NodeTile = ({id, user, name, parents}: NodeTileProps) => {
+  const navigation = useNavigation();
+
   const invite = async () => {
+
+    /*
     await createInvitation(id, user.id);
     await addFamiliarToNode(user, {
       id,
       type: 'Parent', // FIXME: ask for relation
     });
+    */
+
+    await goToAddFamiliar();
     
     Toast.show({
       type: 'info',
       text1: `Convite enviado para o usuário ${name}`
     })
+  };
+
+  const goToAddFamiliar = async () => {
+   
+
+    const result = await new Promise((resolve) => {
+      navigation.navigate(PAGE_NAMES.ADD_FAMILIAR, {
+        node: user,
+        response: true,
+      });
+
+      navigation.addListener('focus', () => {
+        // Listen for the screen focus to receive the response
+        const parentType = useParentType();
+        if (!!parentType) {
+          resolve(parentType);
+        }
+      });
+    });
+
+    const parentType = useParentType();
+
+    console.log(result);
   };
 
   return (
