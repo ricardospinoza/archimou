@@ -1,6 +1,7 @@
 import {Text} from 'react-native';
 import {PersonNode} from '../../../models/TreeViewModel';
 import {addFamiliarToNode, createInvitation} from '../../../service';
+import Toast from 'react-native-toast-message'
 import {
   Container,
   Name,
@@ -24,6 +25,11 @@ export const NodeTile = ({id, user, name, parents}: NodeTileProps) => {
       id,
       type: 'Parent', // FIXME: ask for relation
     });
+    
+    Toast.show({
+      type: 'info',
+      text1: `Convite enviado para o usuário ${name}`
+    })
   };
 
   return (
