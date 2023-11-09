@@ -70,7 +70,7 @@ export const Search = ({route}: SearchProps) => {
                   id={item.id}
                   user={user}
                   name={item.name}
-                  parents={item.parentsNames}
+                  parents={!!item.parentsNames ? item.parentsNames : []}
                 />
               );
             }}

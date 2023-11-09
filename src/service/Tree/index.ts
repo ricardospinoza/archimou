@@ -1,4 +1,4 @@
-import {PersonNode, Relation} from './../../models/TreeViewModel/index';
+import {Invite, PersonNode, Relation} from './../../models/TreeViewModel/index';
 import { getIntancePeople, getIntanceInvite } from '../../utils/firebase-factory';
 
 export const getUserTree = async (relations: Relation[]) => {
@@ -51,6 +51,22 @@ export const addFamiliarToNode = async (
       .doc(node.id)
       .update({
         relations: [...node.relations, newRelation],
+      });
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+
+export const addInviteToNode = async (
+  node: PersonNode,
+  newInvite: Invite,
+) => {
+  try {
+    await getIntancePeople()
+      .doc(node.id)
+      .update({
+        invites: !!node.invites ? [...node.invites, newInvite] : newInvite,
       });
   } catch (e) {
     console.error(e);

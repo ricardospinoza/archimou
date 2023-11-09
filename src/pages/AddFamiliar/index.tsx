@@ -1,10 +1,9 @@
-import {RouteProp, StackActions, useNavigation, useRoute} from '@react-navigation/native';
-import {useState} from 'react';
-import {useUser} from '../../hooks';
-import {FamiliarTypes} from '../../models/TreeViewModel';
-import {Container, Options, Continue, Option} from './styles';
-import { saveParentType } from '../../store/slices';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { FamiliarTypes } from '../../models/TreeViewModel';
+import { saveParentType } from '../../store/slices';
+import { Container, Continue, Option, Options } from './styles';
 
 interface AddFamiliarProps {
   route: any;
@@ -24,7 +23,7 @@ export const AddFamiliar = ({route}: AddFamiliarProps) => {
   };
 
   const handleContinue = () => {
-
+    
     if (!!needResponse) {
       dispatch(saveParentType(relationType));
       navigation.dispatch(StackActions.pop());

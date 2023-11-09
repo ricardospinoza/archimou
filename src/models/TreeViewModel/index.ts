@@ -12,6 +12,7 @@ export interface PersonNode {
   photo: string;
   description?: string;
   relations: Relation[];
+  invites?: Invite[];
   position?: Position;
 }
 
@@ -19,6 +20,8 @@ export interface Relation {
   id: string;
   type: FamiliarTypes;
 }
+
+export interface Invite extends Relation {}
 
 export class TreeViewModel {
   #data: PersonNode[] = [];
