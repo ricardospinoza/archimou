@@ -6,7 +6,7 @@ let db: any = null;
 const getInstance = (tableName: string) => {
 
     if (db == null) {
-        firestore().useEmulator("localhost", 8080);
+        // firestore().useEmulator("localhost", 8080);
         db = firestore();
     }
     return db.collection(tableName);   

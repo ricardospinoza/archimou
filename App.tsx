@@ -7,7 +7,7 @@ import Toast from 'react-native-toast-message';
 
 GoogleSignin.configure({
   webClientId:
-    '92146690602-e5u9c32trvitgb6ntvg0v39h54es14tb.apps.googleusercontent.com',
+    '972273575075-7r837ackasifn29f569kn9p1s0lksoht.apps.googleusercontent.com',
 });
 const App = () => {
   return (
