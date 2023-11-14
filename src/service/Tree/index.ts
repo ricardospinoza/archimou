@@ -66,7 +66,7 @@ export const addInviteToNode = async (
     await getIntancePeople()
       .doc(node.id)
       .update({
-        invites: !!node.invites ? [...node.invites, newInvite] : newInvite,
+        invites: !!node.invites ? [...node.invites, newInvite] : [newInvite],
       });
   } catch (e) {
     console.error(e);
