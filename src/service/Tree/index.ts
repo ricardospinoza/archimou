@@ -63,10 +63,11 @@ export const addInviteToNode = async (
   newInvite: Invite,
 ) => {
   try {
+    node.invites = !!node.invites ? [...node.invites, newInvite] : [newInvite];
     await getIntancePeople()
       .doc(node.id)
       .update({
-        invites: !!node.invites ? [...node.invites, newInvite] : [newInvite],
+        invites: node.invites,
       });
   } catch (e) {
     console.error(e);
@@ -204,6 +205,22 @@ export const updateUserInvitations = async (
 ) => {
   try {
     await getIntanceInvite().doc(userId).update({invitations});
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+
+export const removeNodeInvitation = async (
+  user: PersonNode,
+  inviteId: string,
+) => {
+  try {
+    user.invites = user.invites != null ? user.invites.filter(({id}) => id !== inviteId) : user.invites;
+    await getIntancePeople().doc(user.id).update({
+      invites: user.invites,
+    });
+
   } catch (e) {
     console.error(e);
   }
