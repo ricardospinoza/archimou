@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { PAGE_NAMES } from '../../../constants';
 import { useParentType } from '../../../hooks/ParentType';
 import { PersonNode } from '../../../models/TreeViewModel';
-import { addInviteToNode, removeNodeInvitation, sendMessage } from '../../../service';
+import { createInvitation, getInviteSent, removeNodeInvitation, sendMessage } from '../../../service';
 import { deleteParentType } from '../../../store/slices';
 import {
   ConnectButton,
@@ -36,9 +36,9 @@ export const NodeTile = ({id, user, name, parents}: NodeTileProps) => {
     const addParent = async () => {
       if (!!parentType) {
   
-        // await createInvitation(id, user.id); // TODO: analisar lógica, para identificar a necessidade dessa collection
-        await addInviteToNode(user, {
-          id,
+        await createInvitation({
+          receiverNodeId: id,
+          senderNodeId: user.id,
           type: parentType,
         });
 
@@ -81,7 +81,7 @@ export const NodeTile = ({id, user, name, parents}: NodeTileProps) => {
   const removeInvite = async () => {
 
     try {
-      await removeNodeInvitation(user, id);
+      await removeNodeInvitation({nodeSentId: user.id, nodeReceivedId: id});
       Toast.show({
         type: 'success',
         text1: `Convite ao usuário ${name} removido`,
@@ -98,7 +98,9 @@ export const NodeTile = ({id, user, name, parents}: NodeTileProps) => {
   // TODO: Tratar erro no mapeamento do map na lista de invite. Necessário verificar o motivo do erro
   const hasInviteFn = () => {
     try {
-      setHasInvite(!!user.invites && user.invites.length > 0 ? user.invites.map(u => u.id).includes(id) : false);
+      getInviteSent(user.id, sentInviteIds => {
+        setHasInvite(sentInviteIds.length > 0 ? sentInviteIds.includes(id) : false);
+      });
     } catch (e) {
       console.error(e);
       return false;

@@ -30,7 +30,7 @@ export const sendMessage = async (userId: string, title: string, body: string) =
       if (fcmToken.exists) {
         await messaging().sendMessage({
           fcmOptions: {},
-          to: fcmToken.token,
+          to: fcmToken.data().token,
           data: {
             title,
             body

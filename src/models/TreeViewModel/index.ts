@@ -16,12 +16,21 @@ export interface PersonNode {
   position?: Position;
 }
 
+export interface CreationInvite {
+  receiverNodeId: string;
+  senderNodeId: string;
+  type: FamiliarTypes;
+}
+
 export interface Relation {
   id: string;
   type: FamiliarTypes;
 }
 
-export interface Invite extends Relation {}
+export interface Invite {
+  sent: Relation[];
+  received: Relation[];
+}
 
 export interface FcmToken {
   userId: string;

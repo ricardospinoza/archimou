@@ -1,4 +1,4 @@
-import {Invite, PersonNode, Relation} from './../../models/TreeViewModel/index';
+import {FamiliarTypes, Invite, PersonNode, Relation} from './../../models/TreeViewModel/index';
 import { getIntancePeople, getIntanceInvite } from '../../utils/firebase-factory';
 
 export const getUserTree = async (relations: Relation[]) => {
@@ -58,21 +58,21 @@ export const addFamiliarToNode = async (
 };
 
 
-export const addInviteToNode = async (
-  node: PersonNode,
-  newInvite: Invite,
-) => {
-  try {
-    node.invites = !!node.invites ? [...node.invites, newInvite] : [newInvite];
-    await getIntancePeople()
-      .doc(node.id)
-      .update({
-        invites: node.invites,
-      });
-  } catch (e) {
-    console.error(e);
-  }
-};
+// export const addInviteToNode = async (
+//   node: PersonNode,
+//   newInvite: Invite,
+// ) => {
+//   try {
+//     node.invites = !!node.invites ? [...node.invites, newInvite] : [newInvite];
+//     await getIntancePeople()
+//       .doc(node.id)
+//       .update({
+//         invites: node.invites,
+//       });
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
 
 export const replaceFamiliarNode = async (
   node: PersonNode,
@@ -163,29 +163,96 @@ export const getParentsByNode = async (node: PersonNode) => {
     console.error(e);
   }
 };
-// Não entendi a necessidade do invite
 
-/*
- * Dúvidas em relação ao motivo de não ter notificação, e entrar direto na rede da outra pessoa
- */
 export const createInvitation = async (
-  invitedNodeId: string,
-  invitationNodeId: string,
+  invite: {
+    receiverNodeId: string,
+    senderNodeId: string,
+    type: FamiliarTypes
+  }
 ) => {
   try {
-    const invitesRaw = await getIntanceInvite().doc(invitedNodeId).get();
 
-    const invites = (invitesRaw.data()?.invitations as Array<string>) ?? [];
-
-    await getIntanceInvite()
-      .doc(invitedNodeId)
-      .set({
-        invitations: [...invites, invitationNodeId],
-      });
+    await createReceiverInvitation(invite);
+    await createSenderInvitation(invite);
+    
   } catch (e) {
     console.error(e);
   }
 };
+
+const createReceiverInvitation = async (invite: any) => {
+  const {receiverNodeId, senderNodeId, type} = invite;
+
+    const inviteReceiver = await getIntanceInvite().doc(receiverNodeId).get();
+
+    const receiver = {
+      id: senderNodeId,
+      type
+    } as Relation;
+
+    if (inviteReceiver.exists) {
+      const receivedInvites = (inviteReceiver.data()?.received as Array<Invite>) ?? [];
+
+      await getIntanceInvite()
+      .doc(receiverNodeId)
+      .update({
+        received: [...receivedInvites, 
+          receiver
+        ],
+      });
+
+    } else {
+      await getIntanceInvite()
+        .doc(receiverNodeId)
+        .set({
+          received: [receiver]
+        });
+    }
+
+}
+
+
+const createSenderInvitation = async (invite: any) => {
+  const {receiverNodeId, senderNodeId, type} = invite;
+
+    const inviteSender = await getIntanceInvite().doc(senderNodeId).get();
+
+    const sender = {
+      id: receiverNodeId,
+      type
+    } as Relation;
+
+    if (inviteSender.exists) {
+      const sentInvites = (inviteSender.data()?.sent as Array<Invite>) ?? [];
+
+      await getIntanceInvite()
+      .doc(senderNodeId)
+      .update({
+        sent: [...sentInvites, 
+          sender
+        ],
+      });
+
+    } else {
+      await getIntanceInvite()
+        .doc(senderNodeId)
+        .set({
+          sent: [sender]
+        });
+    }
+
+}
+
+export const getInviteSent = (userId: string, callback: (sentInviteIds: string[]) => void) => {
+  getIntanceInvite()
+    .doc(userId)
+    .onSnapshot((data: any) => {
+      const invites = data.data() as Invite;
+      const sentIds = invites?.sent.map(value => value.id) ?? [];
+      callback(sentIds);
+    })
+}
 
 export const listenInvitations = (
   userId: string,
@@ -199,6 +266,9 @@ export const listenInvitations = (
     });
 };
 
+/*
+  Metodo que precisa ser revalidado da necessidade
+*/
 export const updateUserInvitations = async (
   userId: string,
   invitations: string[],
@@ -211,15 +281,28 @@ export const updateUserInvitations = async (
 };
 
 
-export const removeNodeInvitation = async (
-  user: PersonNode,
-  inviteId: string,
+export const removeNodeInvitation = async (ids: {
+  nodeSentId: string;
+  nodeReceivedId: string;
+}
 ) => {
   try {
-    user.invites = user.invites != null ? user.invites.filter(({id}) => id !== inviteId) : user.invites;
-    await getIntancePeople().doc(user.id).update({
-      invites: user.invites,
-    });
+
+    const {nodeSentId, nodeReceivedId} = ids;
+
+    const getIntanceSent = await getIntanceInvite().doc(nodeSentId).get();
+    const sentNode = getIntanceSent.data() as Invite;
+    await getIntanceInvite().doc(nodeSentId)
+      .update({
+        sent: sentNode.sent.filter(({id}) => id !== nodeReceivedId)
+      } as Invite)
+
+    const getInstanceReceived = await getIntanceInvite().doc(nodeReceivedId).get();
+    const receivedNode = getInstanceReceived.data() as Invite;
+    await getIntanceInvite().doc(nodeReceivedId)
+      .update({
+        received: receivedNode.received.filter(({id}) => id !== nodeSentId)
+      } as Invite)
 
   } catch (e) {
     console.error(e);
