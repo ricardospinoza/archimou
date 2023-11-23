@@ -1,11 +1,11 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { useDispatch } from 'react-redux';
 import { PAGE_NAMES } from '../../../constants';
 import { useParentType } from '../../../hooks/ParentType';
 import { PersonNode } from '../../../models/TreeViewModel';
-import { addInviteToNode, createInvitation, removeNodeInvitation } from '../../../service';
+import { addInviteToNode, removeNodeInvitation, sendMessage } from '../../../service';
 import { deleteParentType } from '../../../store/slices';
 import {
   ConnectButton,
@@ -41,6 +41,8 @@ export const NodeTile = ({id, user, name, parents}: NodeTileProps) => {
           id,
           type: parentType,
         });
+
+        await sendMessage(id, "Teste", "Mensagem Adriano");
   
         Toast.show({
           type: 'success',

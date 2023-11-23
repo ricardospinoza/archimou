@@ -20,3 +20,8 @@ export const getIntancePeople = () => {
 export const getIntanceInvite = () => {
     return getInstance(TABLE_NAMES.INVITES);
 }
+
+
+export const getIntanceFcmToken = () => {
+    return getInstance(TABLE_NAMES.FMC_TOKEN);
+}

@@ -24,7 +24,8 @@ export const DATE_MASK = [
 
 export const TABLE_NAMES = {
   PEOPLE: 'People',
-  INVITES: 'Invites'
+  INVITES: 'Invites',
+  FMC_TOKEN: 'FCM_TOKEN'
 };
 
 export const PAGE_NAMES = {

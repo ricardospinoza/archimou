@@ -23,6 +23,12 @@ export interface Relation {
 
 export interface Invite extends Relation {}
 
+export interface FcmToken {
+  userId: string;
+  token: string;
+  created_at: string;
+}
+
 export class TreeViewModel {
   #data: PersonNode[] = [];
   #nodeRef = {} as PersonNode;

@@ -1,23 +1,28 @@
-import {ElementRef, Ref, useEffect, useRef, useState} from 'react';
-import {BaseTree, Dock, InvitationModal, NodeOptions} from '../../components';
+import messaging from '@react-native-firebase/messaging';
+import { useIsFocused } from '@react-navigation/native';
+import { ElementRef, Ref, useEffect, useRef, useState } from 'react';
+import { BaseTree, Dock, InvitationModal, NodeOptions } from '../../components';
 import {
   InteractiveView,
   InteractiveViewHandler,
 } from '../../components/InteractiveView';
-import {HALF_SIZE, NODE_CENTER, SIZE} from '../../constants';
-import {useTree, useUser} from '../../hooks';
-import {Position} from '../../types';
-import {FamiliarTypes, PersonNode} from '../../models/TreeViewModel';
-import {useIsFocused} from '@react-navigation/native';
+import { HALF_SIZE, NODE_CENTER, SIZE } from '../../constants';
+import { useTree, useUser } from '../../hooks';
+import { FamiliarTypes, PersonNode } from '../../models/TreeViewModel';
+import { Position } from '../../types';
 
+
+import { Alert } from 'react-native';
 import {
   addFamiliarToNode,
   deleteTempNode,
+  existsTokenFCM,
   getDynamicLinkData,
   getUserNode,
   listenInvitations,
   replaceFamiliarNode,
-  updateUserInvitations,
+  updateTokenFCM,
+  updateUserInvitations
 } from '../../service';
 
 export const Home = () => {
@@ -38,6 +43,15 @@ export const Home = () => {
   };
 
   const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage.data));
+      console.log("teste de mensagem", remoteMessage.data)
+    });
+
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     initialize();
@@ -73,6 +87,38 @@ export const Home = () => {
     setTempId(data!.tempId);
     setInvite(data!.userInviteId);
   };
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      try {
+        
+        const existsToken = await existsTokenFCM(user.id);
+
+        if (!existsToken) {
+          console.log("Get token fcm")
+          const permissionStatus = await messaging().requestPermission();
+
+          if (permissionStatus === messaging.AuthorizationStatus.AUTHORIZED) {
+            console.log('Permission granted');
+            const fcmToken = await messaging().getToken();
+            updateTokenFCM({
+              userId: user.id,
+              token: fcmToken,
+              created_at: new Date().toISOString(),
+            });
+            
+          } else {
+            console.log('Permission denied');
+          }
+        }
+
+      } catch (error) {
+        console.error('Error requesting permission:', error);
+      }
+    };
+
+    requestPermission();
+  }, []);
 
   const setInvite = async (userInviteId: string) => {
     const userInvitation = await getUserNode(userInviteId);
