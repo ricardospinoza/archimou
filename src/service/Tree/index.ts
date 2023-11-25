@@ -1,4 +1,4 @@
-import {FamiliarTypes, Invite, PersonNode, Relation} from './../../models/TreeViewModel/index';
+import {FamiliarTypes, Invitation, Invite, PersonNode, Relation} from './../../models/TreeViewModel/index';
 import { getIntancePeople, getIntanceInvite } from '../../utils/firebase-factory';
 
 export const getUserTree = async (relations: Relation[]) => {
@@ -168,7 +168,9 @@ export const createInvitation = async (
   invite: {
     receiverNodeId: string,
     senderNodeId: string,
-    type: FamiliarTypes
+    type: FamiliarTypes,
+    senderName: string,
+    senderPhoto: string,
   }
 ) => {
   try {
@@ -182,23 +184,30 @@ export const createInvitation = async (
 };
 
 const createReceiverInvitation = async (invite: any) => {
-  const {receiverNodeId, senderNodeId, type} = invite;
+  const {receiverNodeId, senderName, senderPhoto, senderNodeId, type} = invite;
 
     const inviteReceiver = await getIntanceInvite().doc(receiverNodeId).get();
 
-    const receiver = {
+    const invitation = new Invitation({
       id: senderNodeId,
+      name: senderName,
+      photo: senderPhoto,
       type
-    } as Relation;
+    });
 
     if (inviteReceiver.exists) {
-      const receivedInvites = (inviteReceiver.data()?.received as Array<Invite>) ?? [];
+      const receivedInvites = (inviteReceiver.data()?.received as Array<Invitation>) ?? [];
+
+
+      if (receivedInvites.map(v => v.id).includes(senderNodeId)) {
+        return;
+      }
 
       await getIntanceInvite()
       .doc(receiverNodeId)
       .update({
         received: [...receivedInvites, 
-          receiver
+          invitation
         ],
       });
 
@@ -206,7 +215,8 @@ const createReceiverInvitation = async (invite: any) => {
       await getIntanceInvite()
         .doc(receiverNodeId)
         .set({
-          received: [receiver]
+          received: [invitation],
+          sent: []
         });
     }
 
@@ -218,19 +228,23 @@ const createSenderInvitation = async (invite: any) => {
 
     const inviteSender = await getIntanceInvite().doc(senderNodeId).get();
 
-    const sender = {
-      id: receiverNodeId,
+    const invitation = new Invitation({
+      id: receiverNodeId, 
       type
-    } as Relation;
+    });
 
     if (inviteSender.exists) {
-      const sentInvites = (inviteSender.data()?.sent as Array<Invite>) ?? [];
+      const sentInvites = (inviteSender.data()?.sent as Array<Invitation>) ?? [];
+
+      if (sentInvites.map(v => v.id).includes(receiverNodeId)) {
+        return;
+      }
 
       await getIntanceInvite()
       .doc(senderNodeId)
       .update({
         sent: [...sentInvites, 
-          sender
+          invitation
         ],
       });
 
@@ -238,7 +252,8 @@ const createSenderInvitation = async (invite: any) => {
       await getIntanceInvite()
         .doc(senderNodeId)
         .set({
-          sent: [sender]
+          sent: [invitation],
+          received: []
         });
     }
 
@@ -256,13 +271,14 @@ export const getInviteSent = (userId: string, callback: (sentInviteIds: string[]
 
 export const listenInvitations = (
   userId: string,
-  callback: (invitaions: string[]) => void,
+  callback: (invitations: Invitation[]) => void,
 ) => {
   getIntanceInvite()
     .doc(userId)
-    .onSnapshot(data => {
-      const invitaions = data.data()?.invitations ?? [];
-      callback(invitaions);
+    .onSnapshot((data: any) => {
+      const invites = data.data() as Invite;
+      const received = invites?.received ?? [];
+      callback(received);
     });
 };
 

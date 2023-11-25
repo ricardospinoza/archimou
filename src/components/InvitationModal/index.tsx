@@ -1,5 +1,5 @@
-import {Modal} from 'react-native';
-import {PersonNode} from '../../models/TreeViewModel';
+import { Modal } from 'react-native';
+import { Invitation, PersonNode } from '../../models/TreeViewModel';
 import {
   Button,
   Card,
@@ -11,7 +11,7 @@ import {
 
 interface InvitationModalProps {
   show: boolean;
-  userInvitation: PersonNode;
+  userInvitation: Invitation;
   onConfirm: () => void;
   onDenied: () => void;
 }
@@ -27,10 +27,11 @@ export const InvitationModal = ({
       <Container>
         <Card>
           <ProfilePhoto photoUrl={userInvitation.photo} />
-
           <InviteText>
-            {userInvitation.name} quer entrar na sua rede. Você é relation de
-            fulano?
+            {userInvitation.name} quer entrar na sua rede como {userInvitation.type}.
+          </InviteText>
+          <InviteText>
+            Deseja aceitar o convite?
           </InviteText>
           <InviteActions>
             <Button label="Sim" onPress={() => onConfirm()} />

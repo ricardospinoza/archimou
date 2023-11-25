@@ -4,6 +4,7 @@ import {Position} from '../../types';
 import {DistributeService} from './DistributeService';
 
 export type FamiliarTypes = 'Parent' | 'Sibling' | 'Children' | 'Partner';
+export type StatusInvite = 'accepted' | 'rejected' | 'pending';
 
 export interface PersonNode {
   id: string;
@@ -12,7 +13,6 @@ export interface PersonNode {
   photo: string;
   description?: string;
   relations: Relation[];
-  invites?: Invite[];
   position?: Position;
 }
 
@@ -27,9 +27,31 @@ export interface Relation {
   type: FamiliarTypes;
 }
 
+export class Invitation implements Relation {
+  id: string;
+  name: string;
+  photo: string;
+  type: FamiliarTypes;
+  status: StatusInvite;
+
+  constructor(invitation: {
+    id: string,
+    name?: string,
+    photo?: string,
+    type: FamiliarTypes
+  }) {
+    const {id, name, type, photo} = invitation;
+    this.status = `pending`;
+    this.id = id;
+    this.name = name ?? "";
+    this.type = type;
+    this.photo = photo ?? "";
+  }
+}
+
 export interface Invite {
-  sent: Relation[];
-  received: Relation[];
+  sent: Invitation[];
+  received: Invitation[];
 }
 
 export interface FcmToken {

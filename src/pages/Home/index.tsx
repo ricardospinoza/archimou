@@ -8,7 +8,7 @@ import {
 } from '../../components/InteractiveView';
 import { HALF_SIZE, NODE_CENTER, SIZE } from '../../constants';
 import { useTree, useUser } from '../../hooks';
-import { FamiliarTypes, PersonNode } from '../../models/TreeViewModel';
+import { FamiliarTypes, Invitation, PersonNode, Relation, StatusInvite } from '../../models/TreeViewModel';
 import { Position } from '../../types';
 
 
@@ -25,6 +25,7 @@ import {
   updateUserInvitations
 } from '../../service';
 
+
 export const Home = () => {
   const interactiveViewRef = useRef<ElementRef<typeof InteractiveView>>();
   const {nodes, lines, setFocusedNode, setMainNode} = useTree();
@@ -32,7 +33,7 @@ export const Home = () => {
 
   const [showInviteModal, setShowInviteModal] = useState(false);
 
-  const [userInvitation, setUserInvitation] = useState<PersonNode | null>(null);
+  const [userInvitation, setUserInvitation] = useState<Invitation[] | null>(null);
   const [tempId, setTempId] = useState('');
 
   const user = useUser();
@@ -46,7 +47,6 @@ export const Home = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage.data));
       console.log("teste de mensagem", remoteMessage.data)
     });
 
@@ -70,10 +70,17 @@ export const Home = () => {
 
   useEffect(() => {
     listenInvitations(user.id, async invitations => {
+      console.log("ouvindo o invite")
+      console.log(invitations)
+
       if (!!invitations.length) {
         setTempId(user.id);
-        await setInvite(invitations.shift());
-        await updateUserInvitations(user.id, invitations);
+
+        setUserInvitation(invitations);
+        // Necessário pensar na lógica para mostrar os modais sequênciais quando houver mais de um invite
+        // Ou, o que considero ideal, mostra uma tela de notificação para aceitar ou rejeitar o convite
+        setShowInviteModal(true);
+        // await updateUserInvitations(user.id, invitations);
       }
     });
   }, []);
@@ -120,12 +127,22 @@ export const Home = () => {
     requestPermission();
   }, []);
 
-  const setInvite = async (userInviteId: string) => {
-    const userInvitation = await getUserNode(userInviteId);
+  // const setInvite = async (relations: Invitation[]) => {
 
-    setUserInvitation(userInvitation!);
-    setShowInviteModal(true);
-  };
+  //   const inviteList = relations.map(async r => {
+  //     const user: PersonNode = await getUserNode(r.id);
+  //     return {
+  //       name: user.name,
+  //       ...r
+  //     }
+  //   });
+
+  //   // const userInvitation = await getUserNode(userInviteId);
+
+  //   setUserInvitation(inviteList);
+  //   setShowInviteModal(true);
+
+  // };
 
   const centerMainNode = () => {
     centralizeView(screenCenter);
@@ -149,6 +166,8 @@ export const Home = () => {
   };
 
   const acceptInvitation = async () => {
+
+    return;
     const relation = userInvitation?.relations.find(({id}) => id === tempId);
 
     const mapRelations = {
@@ -175,16 +194,18 @@ export const Home = () => {
 
   return (
     <>
-      {!!userInvitation && (
-        <InvitationModal
-          show={showInviteModal}
-          userInvitation={userInvitation!}
-          onConfirm={acceptInvitation}
-          onDenied={() => {
-            setShowInviteModal(false);
-          }}
-        />
-      )}
+      {
+        userInvitation?.map(invite => {
+          return (<InvitationModal
+            show={showInviteModal}
+            userInvitation={invite}
+            onConfirm={acceptInvitation}
+            onDenied={() => {
+              setShowInviteModal(false);
+            }}
+            />)
+        })
+      }
       <InteractiveView
         size={SIZE}
         ref={interactiveViewRef as Ref<InteractiveViewHandler>}

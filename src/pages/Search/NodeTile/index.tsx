@@ -39,6 +39,8 @@ export const NodeTile = ({id, user, name, parents}: NodeTileProps) => {
         await createInvitation({
           receiverNodeId: id,
           senderNodeId: user.id,
+          senderName: user.name,
+          senderPhoto: user.photo,
           type: parentType,
         });
 
