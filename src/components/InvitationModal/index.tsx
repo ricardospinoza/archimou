@@ -13,7 +13,7 @@ interface InvitationModalProps {
   show: boolean;
   userInvitation: Invitation;
   onConfirm: () => void;
-  onDenied: () => void;
+  onDenied: (invitation: Invitation) => void;
 }
 
 export const InvitationModal = ({
@@ -35,7 +35,7 @@ export const InvitationModal = ({
           </InviteText>
           <InviteActions>
             <Button label="Sim" onPress={() => onConfirm()} />
-            <Button label="Não" onPress={onDenied} />
+            <Button label="Não" onPress={() => onDenied(userInvitation)} />
           </InviteActions>
         </Card>
       </Container>

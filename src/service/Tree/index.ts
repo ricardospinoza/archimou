@@ -282,15 +282,35 @@ export const listenInvitations = (
     });
 };
 
-/*
-  Metodo que precisa ser revalidado da necessidade
-*/
 export const updateUserInvitations = async (
   userId: string,
-  invitations: string[],
+  invitations: Invitation[],
 ) => {
   try {
-    await getIntanceInvite().doc(userId).update({invitations});
+    await getIntanceInvite().doc(userId).update({received: invitations});
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const updateSentUserInvitations = async (
+  receiverUserId: string,
+  invitation: Invitation,
+) => {
+  try {
+
+    const getIntanceSent = await getIntanceInvite().doc(invitation.id).get();
+    const sentInvite = getIntanceSent.data() as Invite;
+    
+
+    await getIntanceInvite().doc(invitation.id).update({
+      sent: sentInvite.sent.map(inv => {
+        if (inv.id === receiverUserId) {
+          inv.status = 'rejected';
+        }
+        return inv;
+      })
+    });
   } catch (e) {
     console.error(e);
   }
