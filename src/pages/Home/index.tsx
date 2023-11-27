@@ -8,17 +8,15 @@ import {
 } from '../../components/InteractiveView';
 import { HALF_SIZE, NODE_CENTER, SIZE } from '../../constants';
 import { useTree, useUser } from '../../hooks';
-import { FamiliarTypes, Invitation, PersonNode, Relation, StatusInvite } from '../../models/TreeViewModel';
+import { FamiliarTypes, Invitation, PersonNode } from '../../models/TreeViewModel';
 import { Position } from '../../types';
 
 
-import { Alert } from 'react-native';
 import {
   addFamiliarToNode,
   deleteTempNode,
   existsTokenFCM,
   getDynamicLinkData,
-  getUserNode,
   listenInvitations,
   replaceFamiliarNode,
   updateSentUserInvitations,
