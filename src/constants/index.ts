@@ -21,3 +21,13 @@ export const DATE_MASK = [
   /\d/,
   /\d/,
 ];
+
+export const TABLE_NAMES = {
+  PEOPLE: 'People',
+  INVITES: 'Invites',
+  FMC_TOKEN: 'FCM_TOKEN'
+};
+
+export const PAGE_NAMES = {
+  ADD_FAMILIAR: 'AddFamiliar'
+};

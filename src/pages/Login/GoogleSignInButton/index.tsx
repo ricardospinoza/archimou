@@ -19,7 +19,7 @@ export const GoogleSignInButton = ({onLoading}: GoogleSignInButtonProps) => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       auth().signInWithCredential(googleCredential);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       onLoading(false);
     }

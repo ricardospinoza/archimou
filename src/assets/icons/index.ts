@@ -8,6 +8,7 @@ import person from './person.svg';
 import calendar from './calendar.svg';
 import google from './google.svg';
 import arrowBack from './arrowBack.svg';
+import notification from './notification.svg';
 
 export const icons = {
   add,
@@ -20,4 +21,5 @@ export const icons = {
   calendar,
   google,
   arrowBack,
+  notification
 };

@@ -52,25 +52,30 @@ export const Search = ({route}: SearchProps) => {
       {!searchTerm ? (
         <NoSearch node={node} />
       ) : (
-        <SectionList
-          sections={[
-            {
-              title: 'Users',
-              data: users.filter(({id}) => user.id !== id),
-            },
-          ]}
-          renderItem={({item}) => {
-            return (
-              <NodeTile
-                id={item.id}
-                user={user}
-                name={item.name}
-                parents={item.parentsNames}
-              />
-            );
-          }}
-          ListFooterComponent={UserNotFound}
-        />
+
+        users.length === 0 
+        ?
+          <UserNotFound node={node} />
+        :
+          <SectionList
+            sections={[
+              {
+                title: 'Users',
+                data: users.filter(({id}) => user.id !== id),
+              },
+            ]}
+            renderItem={({item}) => {
+              return (
+                <NodeTile
+                  id={item.id}
+                  user={user}
+                  name={item.name}
+                  parents={!!item.parentsNames ? item.parentsNames : []}
+                />
+              );
+            }}
+          />
+
       )}
     </Container>
   );

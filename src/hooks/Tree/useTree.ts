@@ -10,11 +10,9 @@ export const useTree = () => {
   const [lines, setLines] = useState<Line[]>([]);
 
   const setMainNode = async (mainNode: PersonNode) => {
-    console.log('CENTRALIZOU E CHAMOU');
     setNodes([mainNode]);
     setLines([]);
     const distributedNodes = await tree.putFamiliarNodesByFocusedNode(mainNode);
-    console.log({mainNode, distributedNodes});
     setNodes(() => {
       const newLines = buildLinesFrom(mainNode, distributedNodes);
       setLines(newLines);
@@ -28,13 +26,22 @@ export const useTree = () => {
   const distributeNodesAndLines = async (node: PersonNode) => {
     const distributedNodes = await tree.putFamiliarNodesByFocusedNode(node);
 
-    setNodes(ns => {
-      const newNodes = filterNewNodes(ns, distributedNodes);
-      const newLines = buildLinesFrom(node, newNodes);
+    const newNodes = filterNewNodes(nodes, distributedNodes);
+    const newLines = buildLinesFrom(node, newNodes);
+
+    if (isNotEmpty(newNodes)) {
+      setNodes(ns => [...ns, ...newNodes]);
+    }
+
+    if (isNotEmpty(newLines)) {
       setLines(lines => [...lines, ...newLines]);
-      return [...ns, ...newNodes];
-    });
+    }
+
   };
+
+  function isNotEmpty(list: any[]) {
+    return list.length !== 0;
+  }
 
   const filterNewNodes = (
     allNodes: PersonNode[],

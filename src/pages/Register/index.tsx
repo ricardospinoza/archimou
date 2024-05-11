@@ -81,7 +81,7 @@ export const Register = () => {
       dispatch(saveUser(node));
       navigation.navigate('Home');
     } catch (e) {
-      console.log('Error registring new user', e);
+      console.error('Error registring new user', e);
     }
   };
 

@@ -15,7 +15,6 @@ export const Splash = () => {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(handleAuthStateChanged);
     return () => {
-      console.log('SAIU');
       subscriber();
     };
   }, []);

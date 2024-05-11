@@ -1,4 +1,5 @@
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {StackActions, useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
@@ -35,9 +36,10 @@ export const Profile = () => {
   const navigation = useNavigation();
 
   const handleSignOut = async () => {
-    console.log('DESLOGOU');
     await auth().signOut();
+    await GoogleSignin.signOut();
     navigation.dispatch(StackActions.popToTop());
+    navigation.navigate('Login');
   };
 
   const buildLink = async () => {
@@ -49,7 +51,6 @@ export const Profile = () => {
       },
     });
     Clipboard.setString(link);
-    console.log({link});
     Alert.alert('Link do convite enviado para area de transferencia', link);
   };
 
@@ -59,7 +60,7 @@ export const Profile = () => {
       const updatedUser = await getUserNode(user.id);
       dispatch(saveUser(updatedUser));
     } catch (e) {
-      console.log('Error removing relation', e);
+      console.error('Error removing relation', e);
     } finally {
       navigation.dispatch(StackActions.pop());
     }
@@ -76,10 +77,13 @@ export const Profile = () => {
           </Info>
         </Header>
 
-        <Content>
-          <BaseButton label="Convidar para a rede" onPress={buildLink} />
-          {!!node.description && <Description>{node.description}</Description>}
-        </Content>
+        { !itsMe ?
+            <Content>
+              <BaseButton label="Convidar para a rede" onPress={buildLink} />
+              {!!node.description && <Description>{node.description}</Description>}
+            </Content>
+          : <Content />
+        }
         <Footer>
           {itsMe ? (
             <Remove label="Sair" onPress={handleSignOut} />

@@ -1,33 +1,49 @@
 {
   "project_info": {
-    "project_number": "92146690602",
-    "project_id": "archimou-dev",
-    "storage_bucket": "archimou-dev.appspot.com"
+    "project_number": "972273575075",
+    "project_id": "archimou-adriano",
+    "storage_bucket": "archimou-adriano.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:92146690602:android:4006e6d57fcaf4077f7153",
+        "mobilesdk_app_id": "1:972273575075:android:ec4f1328666275ef6f4b16",
         "android_client_info": {
           "package_name": "com.archimou"
         }
       },
       "oauth_client": [
         {
-          "client_id": "92146690602-e5u9c32trvitgb6ntvg0v39h54es14tb.apps.googleusercontent.com",
+          "client_id": "972273575075-lhm4ruh3mibvitm4k6gddho757qh4rn7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.archimou",
+            "certificate_hash": "1530c652ab03dae37bf436e70b3e4b2ab56d816a"
+          }
+        },
+        {
+          "client_id": "972273575075-msmlg009vnr5p40qbuj1tuls6jjctu66.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.archimou",
+            "certificate_hash": "6930dfa2a6be00d4f22952f843ea504efcf072b1"
+          }
+        },
+        {
+          "client_id": "972273575075-7r837ackasifn29f569kn9p1s0lksoht.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBOVF-6fRQXs6W6QFe_pVz2F0yANCT2UzM"
+          "current_key": "AIzaSyCvuE7RoHIPI5ZW4DA7ueVv6qCKTYh3vyI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "92146690602-e5u9c32trvitgb6ntvg0v39h54es14tb.apps.googleusercontent.com",
+              "client_id": "972273575075-7r837ackasifn29f569kn9p1s0lksoht.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
